@@ -176,12 +176,12 @@ class GA:
                         offset = (2*(random.random()-0.5)
                                 *self.mutation_factor
                                 *(self.ub[j]-self.lb[j]))
-                        if offset > 0 and offset < 1:
-                            offset = 1
-                        elif offset < 0 and offset > -1:
-                            offset = -1
-                        else:
-                            offset = int(offset)
+                        # if offset > 0 and offset < 1:
+                            # offset = 1
+                        # elif offset < 0 and offset > -1:
+                            # offset = -1
+                        # else:
+                            # offset = int(offset)
                         new_genotype[j] = new_genotype[j]+offset
                         if new_genotype[j] > self.ub[j]:
                             new_genotype[j] = self.ub[j]
@@ -213,7 +213,7 @@ class Individual(object):
         needs to be evaluated by the objective function."""
     def __init__(self, fitness_function, genotype=None):
         if genotype is None:
-            self.genotype = [int(random.random()*(fitness_function.ub[i]-
+            self.genotype = [(random.random()*(fitness_function.ub[i]-
                 fitness_function.lb[i]) + fitness_function.lb[i])\
                         for i in range(fitness_function.num_vars)]
         else:
