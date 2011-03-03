@@ -245,8 +245,10 @@ if __name__ == "__main__":
         return sum([i**2 for i in x])
     # fitness_func = FitnessFunction(myfunc1,4,[-10]*12,[10]*12)
 
-    import fitness
-    fitness_func = FitnessFunction(fitness.check_points,8,[0]*8,[20]*8)
+    # import fitness
+    # fitness_func = FitnessFunction(fitness.check_points,4,[0]*4,[2*np.pi]*4)
+    import newFitness
+    fitness_func = FitnessFunction(newFitness.calculate_error,4,[0]*4,[2*np.pi]*4)
 
     ga = GA(fitness_func)
     ga.run()
