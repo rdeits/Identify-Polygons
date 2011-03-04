@@ -6,7 +6,7 @@ import Image
 import matplotlib.pyplot as plt
 import csv
 
-image = Image.open('sample_tri.png')
+image = Image.open('sample_tri2.png')
 (width,height) = image.size
 image = image.convert('RGB')
 image_data = np.resize(image.getdata(),(height,width,3))
@@ -59,6 +59,27 @@ def regression(x,y):
     else:
         return m, b, residues[0]
 
+def orthogonal_regression(x,y):
+    x = np.array(x)
+    y = np.array(y)
+    n = len(x)
+    x_bar = np.mean(x)
+    y_bar = np.mean(y)
+    s_xx = 1/(n-1) * np.sum(np.power(x-x_bar,2))
+    s_xy = 1/(n-1) * np.sum(np.multiply((x-x_bar),(y-y_bar)))
+    s_yy = 1/(n-1) * np.sum(np.power(y-y_bar,2))
+    beta1 = ((s_yy - s_xx + np.sqrt(np.power(s_yy-s_xx,2)+4*np.power(s_xy,2)))/
+            (2*s_xy))
+    beta0 = y_bar - beta1*x_bar
+    a = -beta1
+    b = 1
+    c = -beta0
+    residue = np.sum(np.divide(np.abs(a*x + b*y + c),np.sqrt(a**2 + b**2)))
+    # print "slope:", beta1
+    # print "intercept:", beta0
+    # print "residue:",residue
+    return beta1, beta0, residue
+
 def calculate_error(thetas):
     error = 0
     for i, t0 in enumerate(thetas):
@@ -71,8 +92,8 @@ def calculate_error(thetas):
                     or ((t0 >= t1) and (angles[i] > t0 or angles[i] < t1))):
                 x_bin.append(x)
                 y_bin.append(y)
-        if len(x_bin) > 0:
-            m, b, residues = regression(x_bin,y_bin)
+        if len(x_bin) > 1:
+            m, b, residues = orthogonal_regression(x_bin,y_bin)
             error += residues
     return error
 
@@ -97,8 +118,8 @@ def plot_estimate(thetas):
                     or ((t0 >= t1) and (angles[i] > t0 or angles[i] < t1))):
                 x_bin.append(x)
                 y_bin.append(y)
-        if len(x_bin) > 0:
-            m, b, residues = regression(x_bin,y_bin)
+        if len(x_bin) > 1:
+            m, b, residues = orthogonal_regression(x_bin,y_bin)
             error += residues
             slopes.append(m)
             intercepts.append(b)
