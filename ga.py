@@ -34,6 +34,7 @@ class GA:
             elite_count = 1,
             max_generations = 10000,
             fitness_tol = 0.1,
+            min_fitness = 0,
             stall_generations = 1000):
         self.fitness_function = fitness_function
         self.pop_size = pop_size
@@ -42,12 +43,11 @@ class GA:
         self.elite_count = elite_count
         self.max_generations = max_generations
         self.fitness_tol = 0.1
-        self.min_fitness = 0
+        self.min_fitness = min_fitness
         self.stall_generations = stall_generations
         self.generation = 0
         self.best_fitnesses = []
         self.keep_num = int((self.keep_fraction * pop_size) / 2 * 2)
-        self.mutation_factor = 1
 
         self.lb = self.fitness_function.lb
         self.ub = self.fitness_function.ub
@@ -58,7 +58,6 @@ class GA:
     def create_population(self,size):
         individuals = [Individual(self.fitness_function,None)\
                 for i in range(size)]
-        self.all_individuals = [indiv.genotype[:] for indiv in individuals]
         return np.array(individuals)
 
     def sort(self):
@@ -101,7 +100,7 @@ class GA:
                 (self.generation > self.stall_generations and 
                     (self.best_fitnesses[-self.stall_generations] - 
                         self.best_fitnesses[-1] == 0)) or 
-                    (self.best_fitnesses[-1] == self.min_fitness))
+                    (self.best_fitnesses[-1] <= self.min_fitness))
 
     def report(self):
         print "Best fitness:", self.individuals[0].fitness
@@ -166,39 +165,65 @@ class GA:
         """perform mutation on all individuals in the population except the top 
         self.elite_count by randomly replacing values in those individuals with 
         new values within the allowable range"""
-        for i in range(self.elite_count, len(self.individuals)):
-            while True:
-                self.mutation_stall = 1
-                self.update_mutation_factor()
-                new_genotype = self.individuals[i].genotype
-                for j in range(self.num_vars):
-                    if random.random() < self.mut_rate:
-                        offset = (2*(random.random()-0.5)
-                                *self.mutation_factor
-                                *(self.ub[j]-self.lb[j]))
-                        # if offset > 0 and offset < 1:
-                            # offset = 1
-                        # elif offset < 0 and offset > -1:
-                            # offset = -1
-                        # else:
-                            # offset = int(offset)
-                        new_genotype[j] = new_genotype[j]+offset
-                        if new_genotype[j] > self.ub[j]:
-                            new_genotype[j] = self.ub[j]
-                        elif new_genotype[j] < self.lb[j]:
-                            new_genotype[j] = self.lb[j]
-                self.individuals[i].genotype = new_genotype
-                if (all([new_genotype != genotype for genotype in self.all_individuals])):
-                    self.all_individuals.append(self.individuals[i].genotype[:])
-                    break
-                elif (self.mutation_stall > 100):
-                    break
-                    print "timed out"
-                self.mutation_stall += 1
+        for indiv in self.individuals[self.elite_count:]:
+            self.update_mutation_factor()
+            new_genotype = indiv.genotype
+            for j in range(self.num_vars):
+                if random.random() < self.mut_rate:
+                    offset = (2*(random.random()-0.5)
+                            *self.mutation_factor
+                            *(self.ub[j]-self.lb[j]))
+                    # print "offset:",offset
+                    # if offset > 0 and offset < 1:
+                        # offset = 1
+                    # elif offset < 0 and offset > -1:
+                        # offset = -1
+                    # else:
+                        # offset = int(offset)
+                    new_genotype[j] = new_genotype[j]+offset
+                    if new_genotype[j] > self.ub[j]:
+                        new_genotype[j] = self.ub[j]
+                    elif new_genotype[j] < self.lb[j]:
+                        new_genotype[j] = self.lb[j]
+            indiv.genotype = new_genotype
 
     def update_mutation_factor(self):
         if self.generation > 10:
-            self.mutation_factor = 10./self.generation
+            self.mutation_factor = 2.5/self.generation
+        else:
+            self.mutation_factor = 0.25
+
+class PolygonGA(GA):
+    def mutate_all(self):
+        """perform mutation on all individuals in the population except the top 
+        self.elite_count by randomly replacing values in those individuals with 
+        new values within the allowable range"""
+        for indiv in self.individuals[self.elite_count:]:
+            self.update_mutation_factor()
+            new_genotype = indiv.genotype
+            for j in range(self.num_vars):
+                if random.random() < self.mut_rate:
+                    offset = (2*(random.random()-0.5)
+                            *self.mutation_factor
+                            *(self.ub[j]-self.lb[j]))
+                    # print "offset:",offset
+                    # if offset > 0 and offset < 1:
+                        # offset = 1
+                    # elif offset < 0 and offset > -1:
+                        # offset = -1
+                    # else:
+                        # offset = int(offset)
+                    new_genotype[j] = new_genotype[j]+offset
+                    new_genotype[j] %= (2*np.pi)
+                    if new_genotype[j] > self.ub[j]:
+                        new_genotype[j] = self.ub[j]
+                    elif new_genotype[j] < self.lb[j]:
+                        new_genotype[j] = self.lb[j]
+            indiv.genotype = new_genotype
+    def report(self):
+        print "Best fitness:", self.individuals[0].fitness
+        print "Best genotype:", self.individuals[0].genotype
+        newFitness.plot_estimate(self.individuals[0].genotype)
 
 
 class Individual(object):
@@ -250,7 +275,7 @@ if __name__ == "__main__":
     import newFitness
     fitness_func = FitnessFunction(newFitness.calculate_error,4,[0]*4,[2*np.pi]*4)
 
-    ga = GA(fitness_func)
+    ga = PolygonGA(fitness_func,min_fitness = 5400)
     ga.run()
 
 
