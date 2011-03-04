@@ -6,24 +6,23 @@ import Image
 import matplotlib.pyplot as plt
 import csv
 
-image = Image.open('sample_tri2.png')
+image = Image.open('sample_tri.png')
 (width,height) = image.size
 image = image.convert('RGB')
 image_data = np.resize(image.getdata(),(height,width,3))
-total_value = 0
-x_weight = 0
-y_weight = 0
 
+data = []
 f = open('data.csv','wb')
 csv_writer = csv.writer(f)
 for x in range(width):
     for y in range(height):
         if image_data[y][x][0] > 0:
             csv_writer.writerow([x,y])
+            data.append([x,y])
 f.close()
-f = open('data.csv','rb')
-csv_reader = csv.reader(open('data.csv','rb'))
-data = [[float(row[0]),float(row[1])] for row in csv_reader] 
+# f = open('data.csv','rb')
+# csv_reader = csv.reader(open('data.csv','rb'))
+# data = [[float(row[0]),float(row[1])] for row in csv_reader] 
 x_list = [el[0] for el in data]
 y_list = [el[1] for el in data]
 centroid = (sum(x_list)/len(x_list), sum(y_list)/len(y_list))
@@ -42,23 +41,6 @@ for i,[x,y] in enumerate(data):
         angles[i] += np.pi
     angles[i] %= (2*np.pi)
     
-
-
-def regression(x,y):
-    A = np.vstack([x,np.ones(len(x))]).T
-    [[m,b], residues,rank,s] = np.linalg.lstsq(A,y)
-    # print "slope:",m
-    # print "intercept:",c
-    # print "residues",residues
-    # x = np.array(x)
-    # plt.plot(x,m*x+b)
-    # plt.figure()
-    # plt.plot(x,y,'ro')
-    if len(residues) == 0:
-        return 0, 0, 0
-    else:
-        return m, b, residues[0]
-
 def orthogonal_regression(x,y):
     x = np.array(x)
     y = np.array(y)
