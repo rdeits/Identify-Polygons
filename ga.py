@@ -32,10 +32,10 @@ class GA:
             keep_fraction = .5,
             mut_rate = 0.1,
             elite_count = 1,
-            max_generations = 10000,
-            fitness_tol = 0.1,
+            max_generations = 1000,
+            fitness_tol = 1000,
             min_fitness = 0,
-            stall_generations = 1000):
+            stall_generations = 100):
         self.fitness_function = fitness_function
         self.pop_size = pop_size
         self.keep_fraction = keep_fraction
@@ -282,7 +282,9 @@ if __name__ == "__main__":
     # import fitness
     # fitness_func = FitnessFunction(fitness.check_points,4,[0]*4,[2*np.pi]*4)
     import newFitness
-    fitness_func = FitnessFunction(newFitness.calculate_error,4,[0]*4,[2*np.pi]*4)
+    num_sides = 3
+    fitness_func = FitnessFunction(newFitness.calculate_error,
+            num_sides,[0]*num_sides,[2*np.pi]*num_sides)
 
     ga = PolygonGA(fitness_func,min_fitness = 0)
     ga.run()
