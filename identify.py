@@ -58,7 +58,7 @@ class Individual(BaseIndividual):
 
 if __name__ == "__main__":
     import newFitness
-    num_sides = 3
+    num_sides = 4
     fitness_func = FitnessFunction(newFitness.calculate_error,
             num_sides,[0]*num_sides,[2*np.pi]*num_sides)
 

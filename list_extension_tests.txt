@@ -1,0 +1,29 @@
+Rapid list extension in python:
+
+>>> t1 = Timer('l[0:0] = 5,','l=[0,1]')
+>>> print t1.timeit(10000)/10000
+3.96709442139e-06
+
+>>> t2 = Timer('l.append(5)','l=[0,1]')
+>>> print t2.timeit(10000)/10000
+1.57690048218e-07
+
+t3 = Timer('l.insert(0,5)','l=[0,1]')
+print t3.timeit(10000)/10000
+4.90279197693e-06
+
+t4 = Timer('a=np.concatenate((a,np.array([5])))','import numpy as np;a=np.array([0,1])')
+print t4.timeit(10000)/10000
+2.66714096069e-05
+
+In [63]: s1 = """
+   ....: l = []
+   ....: for i in range(10000):
+   ....:     l[0:0]=0,
+   ....: print len(l)
+   ....: """
+In [66]: print Timer(s1).timeit(1)
+10000
+0.036838054657
+
+
