@@ -2,10 +2,11 @@ from __future__ import division
 
 import numpy as np
 import random
-from ga import GA, FitnessFunction
+from ga import GA as BaseGA
+from ga import FitnessFunction as FitnessFunction
 from ga import Individual as BaseIndividual
 
-class PolygonGA(GA):
+class GA(BaseGA):
     def mutate_all(self):
         """perform mutation on all individuals in the population except the top 
         self.elite_count by randomly replacing values in those individuals with 
@@ -40,7 +41,7 @@ class PolygonGA(GA):
     def report(self):
         print "Best fitness:", self.individuals[0].fitness
         print "Best genotype:", self.individuals[0].genotype
-        newFitness.plot_estimate(self.individuals[0].genotype)
+        self.fitness_function.plot_estimate(self.individuals[0].genotype)
 
 class Individual(BaseIndividual):
     @property
@@ -54,13 +55,13 @@ class Individual(BaseIndividual):
         self.dirty = True
         self._fitness = 1e308
 
+
+
 # def find_polygon(
 
 if __name__ == "__main__":
     import newFitness
-    num_sides = 4
-    fitness_func = FitnessFunction(newFitness.calculate_error,
-            num_sides,[0]*num_sides,[2*np.pi]*num_sides)
-
-    ga = PolygonGA(fitness_func,min_fitness = 0)
+    num_sides = 3
+    tester = newFitness.PolygonTester('sample.png',3,[0]*num_sides,[np.pi]*num_sides)
+    ga = GA(tester)
     ga.run()

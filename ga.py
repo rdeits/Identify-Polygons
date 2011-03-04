@@ -21,6 +21,8 @@ class FitnessFunction:
         assert [x[i] > self.lb[i] for i in range(self.num_vars)], "x below lb"
         assert [x[i] < self.ub[i] for i in range(self.num_vars)], "x above ub"
         return self.function(x)
+    def plot_estimate(self,x):
+        pass
 
 class GA:
     def __init__(self,fitness_function,pop_size = 12,
