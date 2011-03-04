@@ -224,6 +224,11 @@ class PolygonGA(GA):
                     elif new_genotype[j] < self.lb[j]:
                         new_genotype[j] = self.lb[j]
             indiv.genotype = new_genotype
+        for i in range(len(self.individuals)):
+            for j in range(i):
+                if self.individuals[i].genotype == self.individuals[j].genotype:
+                    self.individuals[i] = Individual(self.fitness_function)
+                    break
     def report(self):
         print "Best fitness:", self.individuals[0].fitness
         print "Best genotype:", self.individuals[0].genotype
