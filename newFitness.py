@@ -31,7 +31,7 @@ def regression(x,y):
     # x = np.array(x)
     # plt.plot(x,m*x+b)
     if len(residues) == 0:
-        return None, None, 0
+        return 0, 0, 0
     else:
         return m, b, residues[0]
 
@@ -70,10 +70,10 @@ def calculate_error(thetas):
                 # print "(",x,",",y,") at angle",angle
                 if ((t0 < t1) and (angle > t0 and angle < t1)
                         or ((t0 >= t1) and (angle > t0 or angle < t1))):
-                    for i in range(image_data[y][x][0]):
+                    if image_data[y][x][0] > 0:
                         x_bin.append(x)
                         y_bin.append(y)
-        if len(x_bin) > 0:
+        if len(x_bin) > 1:
             error += regression(x_bin,y_bin)[2]
         # else:
             # print "no points between",t0,'and',t1
@@ -111,7 +111,7 @@ def plot_estimate(thetas):
                 # print "(",x,",",y,") at angle",angle
                 if ((t0 < t1) and (angle > t0 and angle < t1)
                         or ((t0 >= t1) and (angle > t0 or angle < t1))):
-                    for i in range(image_data[y][x][0]):
+                    if image_data[y][x][0] > 0:
                         x_bin.append(x)
                         y_bin.append(y)
         if len(x_bin) > 0:
@@ -121,7 +121,7 @@ def plot_estimate(thetas):
             intercepts.append(b)
         else:
             m = b = 0
-        plt.plot([0,20],[b, 20*m+b])
+        plt.plot([0,width],[b, width*m+b])
             # print "no points between",t0,'and',t1
     # print "error =",error
 
@@ -134,8 +134,8 @@ def plot_estimate(thetas):
         corners.append([x, m0*x+b0])
     for [x,y] in corners:
         plt.plot(x,y,'ro')
-    plt.xlim([0,20])
-    plt.ylim([0,20])
+    plt.xlim([0,width])
+    plt.ylim([0,height])
     plt.show()
     return error
 

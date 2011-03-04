@@ -92,8 +92,12 @@ class GA:
             print "Fitness:", indiv.fitness,"\n"
 
     def run(self):
-        while not self.step():
-            pass
+        try:
+            while not self.step():
+                pass
+        except KeyboardInterrupt:
+            self.report()
+
 
     def done(self):
         return (self.generation >= self.max_generations or
@@ -275,7 +279,7 @@ if __name__ == "__main__":
     import newFitness
     fitness_func = FitnessFunction(newFitness.calculate_error,4,[0]*4,[2*np.pi]*4)
 
-    ga = PolygonGA(fitness_func,min_fitness = 5400)
+    ga = PolygonGA(fitness_func,min_fitness = 0)
     ga.run()
 
 
