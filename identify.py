@@ -2,7 +2,8 @@ from __future__ import division
 
 import numpy as np
 import random
-from ga import GA, FitnessFunction, Individual
+from ga import GA, FitnessFunction
+from ga import Individual as BaseIndividual
 
 class PolygonGA(GA):
     def mutate_all(self):
@@ -40,6 +41,20 @@ class PolygonGA(GA):
         print "Best fitness:", self.individuals[0].fitness
         print "Best genotype:", self.individuals[0].genotype
         newFitness.plot_estimate(self.individuals[0].genotype)
+
+class Individual(BaseIndividual):
+    @property
+    def genotype(self):
+        return self._genotype
+
+    @genotype.setter
+    def genotype(self,value):
+        value.sort()
+        self._genotype = value
+        self.dirty = True
+        self._fitness = 1e308
+
+# def find_polygon(
 
 if __name__ == "__main__":
     import newFitness

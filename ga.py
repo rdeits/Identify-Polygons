@@ -28,9 +28,9 @@ class GA:
             mut_rate = 0.1,
             elite_count = 1,
             max_generations = 1000,
-            fitness_tol = 1000,
+            fitness_tol = 100,
             min_fitness = 0,
-            stall_generations = 100):
+            stall_generations = 10):
         self.fitness_function = fitness_function
         self.pop_size = pop_size
         self.keep_fraction = keep_fraction

@@ -1,7 +1,7 @@
 from __future__ import division
 
 import numpy as np
-from scipy import stats
+from scipy import stats, weave
 import Image
 import matplotlib.pyplot as plt
 import csv
@@ -94,6 +94,9 @@ def calculate_error(thetas):
                 y_bin.append(y)
         if len(x_bin) > 1:
             m, b, residues = orthogonal_regression(x_bin,y_bin)
+            # m = b = residues = 0
+            # expr = "m, b, residues = orthogonal_regression(x_bin,y_bin)"
+            # weave.blitz(expr,check_size=0)
             error += residues
     return error
 
@@ -149,5 +152,5 @@ if __name__ == "__main__":
     # print calculate_error([0,np.pi/2,np.pi,np.pi*3/2])
     from timeit import Timer
     t = Timer('print calculate_error([0,np.pi/2,np.pi,np.pi*3/2])','from newFitness import calculate_error;import numpy as np')
-    print t.timeit(1)
+    print t.timeit(100)/100
 
