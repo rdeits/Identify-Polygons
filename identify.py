@@ -61,7 +61,8 @@ class Individual(BaseIndividual):
 
 if __name__ == "__main__":
     import newFitness
-    num_sides = 3
-    tester = newFitness.PolygonTester('sample.png',3,[0]*num_sides,[np.pi]*num_sides)
+    num_sides = 4
+    tester = newFitness.PolygonTester('sample.png',
+            num_sides,[0]*num_sides,[2*np.pi]*num_sides)
     ga = GA(tester)
     ga.run()
