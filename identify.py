@@ -66,7 +66,7 @@ class Individual(BaseIndividual):
 if __name__ == "__main__":
     import newFitness
     num_sides = 4
-    tester = newFitness.PolygonTester('sample2.png',
+    tester = newFitness.PolygonTester('sonar_data.csv',
             num_sides,[0]*num_sides,[2*np.pi]*num_sides)
     ga = GA(tester)
     ga.run()

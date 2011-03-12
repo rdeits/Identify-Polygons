@@ -6,6 +6,7 @@ import Image
 import matplotlib.pyplot as plt
 import csv
 import time
+import os
 
 def orthogonal_regression(x,y):
     x = np.array(x)
@@ -38,24 +39,29 @@ class PolygonTester:
         if ub is None:
             self.ub = [1 for i in range(num_vars)]
         else:
-            self.ub = ub        
-        self.image = Image.open(filename)
-        (self.width,self.height) = self.image.size
-        self.image = self.image.convert('RGB')
-        self.image_data = np.resize(self.image.getdata(),(self.height,self.width,3))
+            self.ub = ub   
+        extension = filename.split(os.path.extsep)[-1]
+        assert extension == 'png' or extension == 'csv', "Data must be png or csv"
+        if  extension == 'png':
+            self.data_type = "image"
+            self.image = Image.open(filename)
+            (self.width,self.height) = self.image.size
+            self.image = self.image.convert('RGB')
+            self.image_data = np.resize(self.image.getdata(),(self.height,self.width,3))
 
-        self.data = []
-        # f = open('data.csv','wb')
-        # csv_writer = csv.writer(f)
-        for x in range(self.width):
-            for y in range(self.height):
-                if self.image_data[y][x][0] > 0:
-                    # csv_writer.writerow([x,y])
-                    self.data.append([x,y])
-        # f.close()
-        # f = open('data.csv','rb')
-        # csv_reader = csv.reader(open('data.csv','rb'))
-        # data = [[float(row[0]),float(row[1])] for row in csv_reader] 
+            self.data = []
+            # f = open('data.csv','wb')
+            # csv_writer = csv.writer(f)
+            for x in range(self.width):
+                for y in range(self.height):
+                    if self.image_data[y][x][0] > 0:
+                        # csv_writer.writerow([x,y])
+                        self.data.append([x,y])
+            # f.close()
+        else:
+            self.data_type = "csv"
+            csv_reader = csv.reader(open(filename,'rb'))
+            self.data = [[float(row[0]),float(row[1])] for row in csv_reader] 
         self.x_list = np.array([el[0] for el in self.data])
         self.y_list = np.array([el[1] for el in self.data])
         self.centroid = (sum(self.x_list)/len(self.x_list), 
@@ -95,12 +101,13 @@ class PolygonTester:
         return self.error
 
     def plot_estimate(self,thetas):
-        plt.figure()
-        plt.hold(True)
-        x = range(self.width)
-        y = range(self.height)
-        X, Y = np.meshgrid(x,y)
-        plt.contourf(X,Y,self.image_data[:,:,0])
+        if self.data_type == "image":
+            plt.figure()
+            plt.hold(True)
+            x = range(self.width)
+            y = range(self.height)
+            X, Y = np.meshgrid(x,y)
+            plt.contourf(X,Y,self.image_data[:,:,0])
         error = 0
         slopes = []
         intercepts = []
@@ -126,7 +133,8 @@ class PolygonTester:
             else:
                 m = b = 0
                 # print "no points between",t0,'and',t1
-            plt.plot([0,self.width],[b, self.width*m+b])
+            if self.data_type == "image":
+                plt.plot([0,self.width],[b, self.width*m+b])
         # print "error =",error
 
         for i in range(len(slopes)):
@@ -137,10 +145,17 @@ class PolygonTester:
             x = (b1-b0)/(m0-m1)
             corners.append([x, m0*x+b0])
         for [x,y] in corners:
-            plt.plot(x,y,'ro')
-        plt.xlim([0,self.width])
-        plt.ylim([0,self.height])
-        plt.show()
+            print "Corner at", x, ",", y
+            if self.data_type == "image":
+                plt.plot(x,y,'ro')
+        if self.data_type == "image":
+            plt.xlim([0,self.width])
+            plt.ylim([0,self.height])
+            plt.show()
+        if self.data_type == "csv":
+            csv_writer = csv.writer(open("corners.csv",'wb'))
+            for point in corners:
+                csv_writer.writerow(point)
         return error
 
 
