@@ -9,8 +9,12 @@ import time
 import os
 
 def orthogonal_regression(x,y):
-    x = np.array(x)
-    y = np.array(y)
+    # x = np.array(x)
+    # y = np.array(y)
+    # print "x:"
+    # print x
+    # print "y:"
+    # print y
     n = len(x)
     x_bar = np.mean(x)
     y_bar = np.mean(y)
@@ -30,16 +34,15 @@ def orthogonal_regression(x,y):
     return beta1, beta0, residue
 
 class PolygonTester:
-    def __init__(self,filename,num_vars,lb=None,ub=None):
+    def __init__(self,filename,num_vars):
         self.num_vars = num_vars
-        if lb is None:
-            self.lb = [0 for i in range(num_vars)]
-        else:
-            self.lb = lb
-        if ub is None:
-            self.ub = [1 for i in range(num_vars)]
-        else:
-            self.ub = ub   
+        self.load_data(filename)
+        self.calculate_angles()
+        self.lb = [0]*num_vars
+        self.ub = [len(self.data)]*num_vars
+        self.sort_data()
+
+    def load_data(self,filename):
         extension = filename.split(os.path.extsep)[-1]
         assert extension == 'png' or extension == 'csv', "Data must be png or csv"
         if  extension == 'png':
@@ -66,8 +69,10 @@ class PolygonTester:
         self.y_list = np.array([el[1] for el in self.data])
         self.centroid = (sum(self.x_list)/len(self.x_list), 
                 sum(self.y_list)/len(self.y_list))
-        print "centroid:",self.centroid
+        # print "centroid:",self.centroid
 
+
+    def calculate_angles(self):
         self.angles = np.zeros(len(self.data))
         for i,[x,y] in enumerate(self.data):
             if x == self.centroid[0]:
@@ -80,27 +85,31 @@ class PolygonTester:
             if x < self.centroid[0]:
                 self.angles[i] += np.pi
             self.angles[i] %= (2*np.pi)
-    
 
-    def __call__(self,thetas):
+    
+    def sort_data(self):
+        # print np.argsort(self.angles)
+        # self.data = self.data[np.argsort(self.angles)]
+        # self.x_list = np.array([el[0] for el in self.data])
+        # self.y_list = np.array([el[1] for el in self.data])
+        self.x_list = self.x_list[np.argsort(self.angles)]
+        self.y_list = self.y_list[np.argsort(self.angles)]
+
+    def __call__(self,indices):
         self.error = 0
-        for i, t0 in enumerate(thetas):
-            t1 = thetas[(i+1)%len(thetas)]
-            slices = []
-            for i in range(len(self.data)):
-                if ((t0 < t1) and (self.angles[i] > t0 and self.angles[i] < t1)
-                        or ((t0 >= t1) and (self.angles[i] > t0 
-                            or self.angles[i] < t1))):
-                    slices.append(i) # This seems to be the fastest way 
-                                        # to grow the list
-                    # slices[0:0] = i
-            self.x_bin = self.x_list[slices]
-            self.y_bin = self.y_list[slices]
+        for i, t0 in enumerate(indices):
+            t1 = indices[(i+1)%len(indices)]
+            if t0 < t1:
+                self.x_bin = self.x_list[t0:t1]
+                self.y_bin = self.y_list[t0:t1]
+            else:
+                self.x_bin = np.hstack((self.x_list[t0:],self.x_list[:t1]))
+                self.y_bin = np.hstack((self.y_list[t0:],self.y_list[:t1]))
             if len(self.x_bin) > 1:
                 self.error +=  orthogonal_regression(self.x_bin,self.y_bin)[2]
         return self.error
 
-    def plot_estimate(self,thetas):
+    def plot_estimate(self,indices):
         if self.data_type == "image":
             plt.figure()
             plt.hold(True)
@@ -113,18 +122,14 @@ class PolygonTester:
         intercepts = []
         corners = []
         self.error = 0
-        for i, t0 in enumerate(thetas):
-            t1 = thetas[(i+1)%len(thetas)]
-            slices = []
-            for i in range(len(self.data)):
-                if ((t0 < t1) and (self.angles[i] > t0 and self.angles[i] < t1)
-                        or ((t0 >= t1) and (self.angles[i] > t0 
-                            or self.angles[i] < t1))):
-                    slices.append(i) # This seems to be the fastest way 
-                                        # to grow the list
-                    # slices[0:0] = i
-            self.x_bin = self.x_list[slices]
-            self.y_bin = self.y_list[slices]
+        for i, t0 in enumerate(indices):
+            t1 = indices[(i+1)%len(indices)]
+            if t0 < t1:
+                self.x_bin = self.x_list[t0:t1]
+                self.y_bin = self.y_list[t0:t1]
+            else:
+                self.x_bin = np.hstack((self.x_list[t0:],self.x_list[:t1]))
+                self.y_bin = np.hstack((self.y_list[t0:],self.y_list[:t1]))
             if len(self.x_bin) > 1:
                 m, b, residue =  orthogonal_regression(self.x_bin,self.y_bin)
                 self.error += residue
@@ -159,10 +164,7 @@ class PolygonTester:
         return error
 
 
-# if __name__ == "__main__":
-    # calculate_error([np.pi/4,np.pi*3/4,np.pi*5/4,np.pi*7/4])
-    # print calculate_error([0,np.pi/2,np.pi,np.pi*3/2])
-    # from timeit import Timer
-    # t = Timer('t.calculate_error([0,np.pi/2,np.pi,np.pi*3/2])','from newFitness import PolygonTester;import numpy as np;t=PolygonTester()')
-    # print t.timeit(100)/100
-
+if __name__ == "__main__":
+    tester = PolygonTester('sonar_data.csv',4)
+    print tester([0,4,8,12])
+   

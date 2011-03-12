@@ -32,7 +32,8 @@ class GA:
             max_generations = 1000,
             fitness_tol = 100,
             min_fitness = 0,
-            stall_generations = 10):
+            stall_generations = 10,
+            verbose = False):
         self.fitness_function = fitness_function
         self.pop_size = pop_size
         self.keep_fraction = keep_fraction
@@ -45,17 +46,21 @@ class GA:
         self.generation = 0
         self.best_fitnesses = []
         self.keep_num = int((self.keep_fraction * pop_size) / 2 * 2)
+        self.verbose = verbose
 
         self.lb = self.fitness_function.lb
         self.ub = self.fitness_function.ub
         self.num_vars = self.fitness_function.num_vars
 
-        self.individuals = self.create_population(self.pop_size)
+        self.create_population(self.pop_size)
 
     def create_population(self,size):
         individuals = [Individual(self.fitness_function,None)\
                 for i in range(size)]
-        return np.array(individuals)
+        if self.verbose:
+            print "Ceated initial pop."
+        self.individuals = np.array(individuals)
+        print self.individuals
 
     def sort(self):
         self.individuals = self.individuals[np.argsort(
@@ -67,11 +72,13 @@ class GA:
 
     def step(self):
         '''Run an entire generation'''
-        print "stepping"
+        if self.verbose:
+            print "stepping"
         self.evaluate()
         self.sort() # This causes the fitness function to be called as needed
         self.best_fitnesses.append(self.individuals[0].fitness)
-        self.print_status()
+        if self.verbose:
+            self.print_status()
         if self.done():
             self.report()
             return True

@@ -7,6 +7,11 @@ from ga import Individual as BaseIndividual
 # import matplotlib.pyplot as plt
 
 class GA(BaseGA):
+    def create_population(self,size):
+        individuals = [Individual(self.fitness_function,None)\
+                for i in range(size)]
+        self.individuals = np.array(individuals)
+
     def mutate_all(self):
         """perform mutation on all individuals in the population except the top 
         self.elite_count by randomly replacing values in those individuals with 
@@ -26,8 +31,8 @@ class GA(BaseGA):
                         # offset = -1
                     # else:
                         # offset = int(offset)
-                    new_genotype[j] = new_genotype[j]+offset
-                    new_genotype[j] %= (2*np.pi)
+                    new_genotype[j] = int(round(new_genotype[j]+offset))
+                    new_genotype[j] %= (self.fitness_function.ub[j])
                     if new_genotype[j] > self.ub[j]:
                         new_genotype[j] = self.ub[j]
                     elif new_genotype[j] < self.lb[j]:
@@ -41,13 +46,22 @@ class GA(BaseGA):
     def report(self):
         print "Best fitness:", self.individuals[0].fitness
         print "Best genotype:", self.individuals[0].genotype
-        self.fitness_function.plot_estimate(self.individuals[0].genotype)
+        # self.fitness_function.plot_estimate(self.individuals[0].genotype)
         # plt.figure()
         # plt.plot(self.best_fitnesses)
         # plt.show()
         
 
 class Individual(BaseIndividual):
+    def __init__(self, fitness_function, genotype=None):
+        if genotype is None:
+            self.genotype = [int(round(random.random()*(fitness_function.ub[i]-
+                fitness_function.lb[i]) + fitness_function.lb[i]))\
+                        for i in range(fitness_function.num_vars)]
+        else:
+            self.genotype = genotype
+        self.fitness_function = fitness_function
+
     @property
     def genotype(self):
         return self._genotype
@@ -66,7 +80,7 @@ class Individual(BaseIndividual):
 if __name__ == "__main__":
     import newFitness
     num_sides = 4
-    tester = newFitness.PolygonTester('sonar_data.csv',
-            num_sides,[0]*num_sides,[2*np.pi]*num_sides)
+    tester = newFitness.PolygonTester('sample2.png',
+            num_sides,)
     ga = GA(tester)
     ga.run()
