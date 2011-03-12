@@ -100,7 +100,7 @@ class GA:
         return (self.generation >= self.max_generations or
                 (self.generation > self.stall_generations and 
                     (self.best_fitnesses[-self.stall_generations] - 
-                        self.best_fitnesses[-1] == 0)) or 
+                        self.best_fitnesses[-1] <= 0.05*self.best_fitnesses[-1])) or 
                     (self.best_fitnesses[-1] <= self.min_fitness))
 
     def report(self):

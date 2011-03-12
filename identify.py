@@ -3,8 +3,8 @@ from __future__ import division
 import numpy as np
 import random
 from ga import GA as BaseGA
-from ga import FitnessFunction as FitnessFunction
 from ga import Individual as BaseIndividual
+# import matplotlib.pyplot as plt
 
 class GA(BaseGA):
     def mutate_all(self):
@@ -42,6 +42,10 @@ class GA(BaseGA):
         print "Best fitness:", self.individuals[0].fitness
         print "Best genotype:", self.individuals[0].genotype
         self.fitness_function.plot_estimate(self.individuals[0].genotype)
+        # plt.figure()
+        # plt.plot(self.best_fitnesses)
+        # plt.show()
+        
 
 class Individual(BaseIndividual):
     @property
@@ -62,7 +66,7 @@ class Individual(BaseIndividual):
 if __name__ == "__main__":
     import newFitness
     num_sides = 4
-    tester = newFitness.PolygonTester('sample.png',
+    tester = newFitness.PolygonTester('sample2.png',
             num_sides,[0]*num_sides,[2*np.pi]*num_sides)
     ga = GA(tester)
     ga.run()
