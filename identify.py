@@ -82,5 +82,5 @@ if __name__ == "__main__":
     num_sides = 4
     tester = newFitness.PolygonTester('sample2.png',
             num_sides,)
-    ga = GA(tester)
+    ga = GA(tester,stall_generations = 20)
     ga.run()
