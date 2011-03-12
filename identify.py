@@ -60,6 +60,7 @@ class Individual(BaseIndividual):
                         for i in range(fitness_function.num_vars)]
         else:
             self.genotype = genotype
+        self.genotype.sort()
         self.fitness_function = fitness_function
 
     @property
