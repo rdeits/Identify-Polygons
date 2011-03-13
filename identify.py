@@ -80,8 +80,16 @@ class Individual(BaseIndividual):
 
 if __name__ == "__main__":
     import newFitness
-    num_sides = 4
-    tester = newFitness.PolygonTester('sample2.png',
-            num_sides,)
-    ga = GA(tester,stall_generations = 20)
-    ga.run()
+    best_fitness = 1e308
+    num_sides = 3
+    while True:
+        tester = newFitness.PolygonTester('sample_pent.png',
+                num_sides,)
+        ga = GA(tester,stall_generations = 20)
+        new_fitness = ga.run()[0]
+        print new_fitness, best_fitness
+        if new_fitness > 0.9 * best_fitness:
+            print "Number of sides was", num_sides - 1
+            break
+        best_fitness = new_fitness
+        num_sides += 1

@@ -101,6 +101,7 @@ class GA:
                 pass
         except KeyboardInterrupt:
             self.report()
+        return [self.individuals[0].fitness, self.individuals[0].genotype]
 
 
     def done(self):
