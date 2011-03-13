@@ -80,7 +80,7 @@ class GA:
         if self.verbose:
             self.print_status()
         if self.done():
-            self.report()
+            # self.report()
             return True
         self.cull()
         self.reproduce()
@@ -100,7 +100,7 @@ class GA:
             while not self.step():
                 pass
         except KeyboardInterrupt:
-            self.report()
+            pass
         return [self.individuals[0].fitness, self.individuals[0].genotype]
 
 
@@ -114,6 +114,7 @@ class GA:
     def report(self):
         print "Best fitness:", self.individuals[0].fitness
         print "Best genotype:", self.individuals[0].genotype
+        return [self.individuals[0].fitness, self.individuals[0].genotype]
 
     def reproduce(self):
         new_children = []

@@ -43,10 +43,12 @@ class GA(BaseGA):
                 if self.individuals[i].genotype == self.individuals[j].genotype:
                     self.individuals[i] = Individual(self.fitness_function)
                     break
-    def report(self):
+    def report(self,plot=False):
         print "Best fitness:", self.individuals[0].fitness
         print "Best genotype:", self.individuals[0].genotype
-        # self.fitness_function.plot_estimate(self.individuals[0].genotype)
+        if plot:
+            self.fitness_function.plot_estimate(self.individuals[0].genotype)
+        return [self.individuals[0].fitness, self.individuals[0].genotype]
         # plt.figure()
         # plt.plot(self.best_fitnesses)
         # plt.show()
@@ -82,14 +84,16 @@ if __name__ == "__main__":
     import newFitness
     best_fitness = 1e308
     num_sides = 3
+    ga_list = []
     while True:
-        tester = newFitness.PolygonTester('sample_pent.png',
-                num_sides,)
+        tester = newFitness.PolygonTester('sample_tri2.png',
+                num_sides)
         ga = GA(tester,stall_generations = 20)
         new_fitness = ga.run()[0]
-        print new_fitness, best_fitness
+        ga_list.append(ga)
         if new_fitness > 0.9 * best_fitness:
             print "Number of sides was", num_sides - 1
             break
         best_fitness = new_fitness
         num_sides += 1
+    ga_list[-2].report(True)
