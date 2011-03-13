@@ -4,6 +4,7 @@ import numpy as np
 import random
 from ga import GA as BaseGA
 from ga import Individual as BaseIndividual
+import sys
 # import matplotlib.pyplot as plt
 
 class GA(BaseGA):
@@ -86,7 +87,7 @@ if __name__ == "__main__":
     num_sides = 3
     ga_list = []
     while True:
-        tester = newFitness.PolygonTester('sample_tri2.png',
+        tester = newFitness.PolygonTester(sys.argv[1],
                 num_sides)
         ga = GA(tester,stall_generations = 20)
         new_fitness = ga.run()[0]
