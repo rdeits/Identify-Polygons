@@ -1,7 +1,7 @@
 from __future__ import division
 
 import numpy as np
-from scipy import stats, weave
+# from scipy import stats, weave
 import Image
 import matplotlib.pyplot as plt
 import csv
