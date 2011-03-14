@@ -9,6 +9,9 @@ import sys
 
 class GA(BaseGA):
     def create_population(self,size):
+        """Initialize the population with new individuals.
+        The generation of a new (presumably random) individual is handled by the 
+        Individual class."""
         individuals = [Individual(self.fitness_function,None)\
                 for i in range(size)]
         self.individuals = np.array(individuals)
@@ -45,6 +48,7 @@ class GA(BaseGA):
                     self.individuals[i] = Individual(self.fitness_function)
                     break
     def report(self,plot=False):
+        self.sort()
         print "Best fitness:", self.individuals[0].fitness
         print "Best genotype:", self.individuals[0].genotype
         if plot:
@@ -56,6 +60,12 @@ class GA(BaseGA):
         
 
 class Individual(BaseIndividual):
+    """each individual in the population is an instance of Individual, 
+    which contains two public fields:
+    self.genotype is a numpy array of the continuous values which that 
+        individual passes to the objective function
+    self.fitness is the numerical fitness score for that individual as 
+        returned by the objective function"""
     def __init__(self, fitness_function, genotype=None):
         if genotype is None:
             self.genotype = [int(round(random.random()*(fitness_function.ub[i]-
@@ -74,12 +84,9 @@ class Individual(BaseIndividual):
     def genotype(self,value):
         value.sort()
         self._genotype = value
-        self.dirty = True
+        self._dirty = True
         self._fitness = 1e308
 
-
-
-# def find_polygon(
 
 if __name__ == "__main__":
     import newFitness

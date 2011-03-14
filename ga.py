@@ -25,12 +25,26 @@ class FitnessFunction:
         pass
 
 class GA:
+    """A genetic algorithm class. The only required argument is a fitness
+    function, which takes the form of a FitnessFunction object here. That
+    object must have fields lb, ub, and num_vars and a __call__ method which
+    expects a list or array of length num_vars.
+
+    Optional parameters:
+    pop_size (int): number of individuals in the population
+    keep_fraction (float): fraction of the population that will remain after culling
+    mut_rate (float): the likelihood that an individual element of each genome will be mutated
+    elite_count (int): the number of top individuals preserved unmutated in each generation
+    max_generations (int): maximum number of generations before stopping the algorithm
+    min_fitness (float): fitness value at which the algorithm will stop
+    stall_generations (int): number of generations over which less than 5% improvement in best fitness will be considered a stall (at which point the algorithm will stop)
+    verbose (bool): print additional debugging information
+    """
     def __init__(self,fitness_function,pop_size = 12,
             keep_fraction = .5,
             mut_rate = 0.1,
             elite_count = 1,
             max_generations = 1000,
-            fitness_tol = 100,
             min_fitness = 0,
             stall_generations = 10,
             verbose = False):
@@ -40,7 +54,6 @@ class GA:
         self.mut_rate = mut_rate
         self.elite_count = elite_count
         self.max_generations = max_generations
-        self.fitness_tol = 0.1
         self.min_fitness = min_fitness
         self.stall_generations = stall_generations
         self.generation = 0
@@ -55,6 +68,9 @@ class GA:
         self.create_population(self.pop_size)
 
     def create_population(self,size):
+        """Initialize the population with new individuals.
+        The generation of a new (presumably random) individual is handled by the 
+        Individual class."""
         individuals = [Individual(self.fitness_function,None)\
                 for i in range(size)]
         if self.verbose:
@@ -63,26 +79,32 @@ class GA:
         print self.individuals
 
     def sort(self):
+        """Sort the population"""
         self.individuals = self.individuals[np.argsort(
             [ind.fitness for ind in self.individuals])]
 
     def evaluate(self):
+        """Evaluate each individual's fitness function"""
+        # This is actually unnecessary. Because of the way Individual.fitness is set
+        # up as a Python property, the call to self.sort() will actually call the 
+        # fitness function as necessary. This is just done to be more explicit and clear.
         for indiv in self.individuals:
             indiv.evaluate()
 
     def step(self):
-        '''Run an entire generation'''
+        '''Run an entire generation. Returns True if the algorithm is finished, False otherwise.'''
         if self.verbose:
             print "stepping"
         self.evaluate()
-        self.sort() # This causes the fitness function to be called as needed
+        self.sort() 
+        # After sorting, self.individuals[0] is the most fit individual
         self.best_fitnesses.append(self.individuals[0].fitness)
         if self.verbose:
             self.print_status()
         if self.done():
             # self.report()
             return True
-        self.cull()
+        self.cull() # kill off the unfit individuals
         self.reproduce()
         self.mutate_all()
         self.generation += 1
@@ -100,7 +122,9 @@ class GA:
             while not self.step():
                 pass
         except KeyboardInterrupt:
+            # Exit gracefully on ^c
             pass
+        self.sort()
         return [self.individuals[0].fitness, self.individuals[0].genotype]
 
 
@@ -112,6 +136,7 @@ class GA:
                     (self.best_fitnesses[-1] <= self.min_fitness))
 
     def report(self):
+        self.sort()
         print "Best fitness:", self.individuals[0].fitness
         print "Best genotype:", self.individuals[0].genotype
         return [self.individuals[0].fitness, self.individuals[0].genotype]
@@ -156,6 +181,7 @@ class GA:
         return [candidates[0],candidates[1]]
 
     def combine(self,parent0,parent1):
+        """Combine the genotypes of two parents to yield two child genotypes"""
         crossover_point = random.randint(0,self.num_vars-1)
         genotype0 = (parent0.genotype[:crossover_point] +
                 parent1.genotype[crossover_point:])
@@ -198,6 +224,8 @@ class GA:
             indiv.genotype = new_genotype
 
     def update_mutation_factor(self):
+        """The mutation factor scales the amount by which the genotypes are mutated.
+        It decreases with the number of generations, starting at generation 10."""
         if self.generation > 10:
             self.mutation_factor = 2.5/self.generation
         else:
@@ -207,14 +235,11 @@ class GA:
 
 class Individual(object):
     """each individual in the population is an instance of Individual, 
-    which contains three fields:
-    self._genotype is a numpy array of the continuous values which that 
+    which contains two public fields:
+    self.genotype is a numpy array of the continuous values which that 
         individual passes to the objective function
     self.fitness is the numerical fitness score for that individual as 
-        returned by the objective function
-    self.dirty specifies whether that individual has been mutated (or created) 
-        since it was last evaluated, and thus determines whether the individual
-        needs to be evaluated by the objective function."""
+        returned by the objective function"""
     def __init__(self, fitness_function, genotype=None):
         if genotype is None:
             self.genotype = [(random.random()*(fitness_function.ub[i]-
@@ -231,7 +256,7 @@ class Individual(object):
     @genotype.setter
     def genotype(self,value):
         self._genotype = value
-        self.dirty = True
+        self._dirty = True
         self._fitness = 1e308
     
     @property
@@ -240,9 +265,9 @@ class Individual(object):
         return self._fitness
 
     def evaluate(self):
-        if self.dirty:
+        if self._dirty:
             self._fitness = self.fitness_function(self.genotype)
-            self.dirty = False
+            self._dirty = False
 
 
 

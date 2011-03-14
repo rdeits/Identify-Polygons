@@ -9,6 +9,9 @@ import time
 import os
 
 def orthogonal_regression(x,y):
+    """Given two arrays, x and y, perform orthogonal regression on them, as
+    described in http://en.wikipedia.org/wiki/Deming_regression. Returns
+    [slope, intercept, total residue]"""
     # x = np.array(x)
     # y = np.array(y)
     # print "x:"
@@ -34,6 +37,18 @@ def orthogonal_regression(x,y):
     return beta1, beta0, residue
 
 class PolygonTester:
+    """A class based on the FitnessFunction class from ga.py to be used for
+    polygon fitting. It takes a filename and a number of sides and tests
+    polygon fits against the data in the file. The file can either be a CSV
+    file of (x, y) pairs of points approximately defining the edges of the
+    polygon or a PNG image, in which any point with non-zero red value is
+    considered a candidate for part of the edge of the polygon. 
+
+    When doing optimization, the PolygonTester's __call__ expects a list of
+    length num_vars specifiying the indices of four points in its data set,
+    sorted by their angle relative to their centroid. It returns the total
+    orthogonal distance of all points from the polygon calculated using those
+    four indices for orthogonal regression."""
     def __init__(self,filename,num_vars):
         self.num_vars = num_vars
         self.load_data(filename)
@@ -96,6 +111,11 @@ class PolygonTester:
         self.y_list = self.y_list[np.argsort(self.angles)]
 
     def __call__(self,indices):
+        """Divide the data points up into num_vars bins at the points specified
+        in indices. Then perform orthogonal regression on all the points in
+        each bin and return the total error. Thus, each bin of points is
+        considered to be a candidate for the collection of all the points along
+        a given side of the polygon."""
         self.error = 0
         for i, t0 in enumerate(indices):
             t1 = indices[(i+1)%len(indices)]
