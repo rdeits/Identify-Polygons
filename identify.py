@@ -2,8 +2,8 @@ from __future__ import division
 
 import numpy as np
 import random
-from ga import GA as BaseGA
-from ga import Individual as BaseIndividual
+from ga.ga import GA as BaseGA
+from ga.ga import Individual as BaseIndividual
 import sys
 # import matplotlib.pyplot as plt
 
@@ -89,12 +89,12 @@ class Individual(BaseIndividual):
 
 
 if __name__ == "__main__":
-    import newFitness
+    import ga.newFitness as fitness
     best_fitness = 1e308
     num_sides = 3
     ga_list = []
     while True:
-        tester = newFitness.PolygonTester(sys.argv[1],
+        tester = fitness.PolygonTester(sys.argv[1],
                 num_sides)
         ga = GA(tester,stall_generations = 20)
         new_fitness = ga.run()[0]
