@@ -178,9 +178,11 @@ class PolygonTester:
             plt.ylim([0,self.height])
             plt.show()
         if self.data_type == "csv":
-            csv_writer = csv.writer(open("corners.csv",'wb'))
+            f = open("corners.csv",'wb')
+            csv_writer = csv.writer(f)
             for point in corners:
                 csv_writer.writerow(point)
+            f.close()
         return error
 
 
