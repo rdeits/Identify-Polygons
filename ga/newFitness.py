@@ -81,7 +81,12 @@ class PolygonTester:
             csv_reader = csv.reader(open(filename,'rb'))
             self.data = [[float(row[0]),float(row[1])] for row in csv_reader] 
         self.x_list = np.array([el[0] for el in self.data])
-        self.y_list = np.array([el[1] for el in self.data])
+        self.y_list = np.array([el[1] for el in self.data]) 
+        self.x_range = [min(self.x_list),max(self.x_list)]
+        self.y_range = [min(self.y_list),max(self.y_list)]
+        if self.data_type == "csv":
+            self.width = self.x_range[1]-self.x_range[0] 
+            self.height = self.y_range[1] - self.y_range[0]
         self.centroid = (sum(self.x_list)/len(self.x_list), 
                 sum(self.y_list)/len(self.y_list))
         # print "centroid:",self.centroid
@@ -130,13 +135,15 @@ class PolygonTester:
         return self.error
 
     def plot_estimate(self,indices):
+        plt.figure()
+        plt.hold(True)
         if self.data_type == "image":
-            plt.figure()
-            plt.hold(True)
             x = range(self.width)
             y = range(self.height)
             X, Y = np.meshgrid(x,y)
             plt.contourf(X,Y,self.image_data[:,:,0])
+        elif self.data_type == "csv":
+            plt.plot(self.x_list,self.y_list,'bo')
         error = 0
         slopes = []
         intercepts = []
@@ -158,8 +165,8 @@ class PolygonTester:
             else:
                 m = b = 0
                 # print "no points between",t0,'and',t1
-            if self.data_type == "image":
-                plt.plot([0,self.width],[b, self.width*m+b])
+            # if self.data_type == "image":
+            # plt.plot([0,self.width],[b, self.width*m+b])
         # print "error =",error
 
         for i in range(len(slopes)):
@@ -169,14 +176,19 @@ class PolygonTester:
             b1 = intercepts[(i+1)%len(slopes)]
             x = (b1-b0)/(m0-m1)
             corners.append([x, m0*x+b0])
-        for [x,y] in corners:
-            print "Corner at", x, ",", y
-            if self.data_type == "image":
-                plt.plot(x,y,'ro')
-        if self.data_type == "image":
-            plt.xlim([0,self.width])
-            plt.ylim([0,self.height])
-            plt.show()
+        corner_index = 0
+        for i in range(len(corners)):
+            [x0,y0] = corners[i]
+            [x1,y1] = corners[(i+1)%len(corners)]
+            print "Corner at", x0, ",", y0
+            # if self.data_type == "image":
+            plt.plot([x0,x1],[y0,y1])
+            plt.text(x0,y0,str(corner_index))
+            corner_index+=1
+        # if self.data_type == "image":
+        plt.xlim(self.x_range)
+        plt.ylim(self.y_range)
+        plt.show()
         if self.data_type == "csv":
             f = open("corners.csv",'wb')
             csv_writer = csv.writer(f)
