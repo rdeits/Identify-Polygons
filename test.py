@@ -4,9 +4,9 @@ from polygon import Polygon
 from identify import *
 import ga.newFitness as fitness
 import os.path
-p = Polygon(num_sides = 3, regular = False)
+p = Polygon(num_sides = 5, regular = False)
 data = p.sample(400, sigma = 0.05)
-tester = fitness.PolygonTester(data, 3)
+tester = fitness.PolygonTester(data, 5)
 ga = GA(tester, stall_generations = 20)
 new_fitness = ga.run()[0]
 
@@ -22,7 +22,7 @@ plt.plot([p[0] for p in data], [p[1] for p in data], 'bo')
 n = 0
 base_path = 'doc/files/2011-08-11'
 while True:
-    fname = 'test%03d.png' %n
+    fname = 'test-5-side%03d.png' %n
     if os.path.exists(os.path.join(base_path, fname)):
         n += 1
     else:
