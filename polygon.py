@@ -44,7 +44,7 @@ class Polygon:
         # plt.hold(True)
         # plt.plot([0], [0])
         # plt.show()
-    def sample(self, n, sigma = 0):
+    def sample(self, n, sigma = 0, plot = False):
         """
         Return a list of n points which lie on the polygon, each point having
         been shifted in a random direction by a random distance whose standard
@@ -71,11 +71,12 @@ class Polygon:
                 point[0] += r * np.cos(theta)
                 point[1] += r * np.sin(theta)
             points.append(point)        
-        plt.plot([self.corners[i][0] for i in range(-1,len(self.corners))], 
-                 [self.corners[i][1] for i in range(-1,len(self.corners))]) 
-        plt.hold(True) 
-        plt.plot([p[0] for p in points], [p[1] for p in points], 'ro')
-        plt.show()
+        if plot:
+            plt.plot([self.corners[i][0] for i in range(-1,len(self.corners))], 
+                     [self.corners[i][1] for i in range(-1,len(self.corners))]) 
+            plt.hold(True) 
+            plt.plot([p[0] for p in points], [p[1] for p in points], 'ro')
+            plt.show()
         return points
 
 if __name__ == "__main__":
