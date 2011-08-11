@@ -8,6 +8,7 @@ import random
 
 num_data_points = 400
 sigma = 0.05
+fitness_improvement_factor = 0.95
 
 result_file = open('results.txt','w')
 print >>result_file, "| Image | Real N | Calculated N | Sensor sigma |"
@@ -24,7 +25,7 @@ for j in range(40):
         ga = GA(tester, stall_generations = 20)
         new_fitness = ga.run()[0]
         ga_list.append(ga)
-        if new_fitness > .9 * best_fitness:
+        if new_fitness > fitness_improvement_factor * best_fitness:
             print "Number of sides was", num_sides - 1
             break
         best_fitness = new_fitness
