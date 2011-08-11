@@ -1084,6 +1084,26 @@ How to choose the points on the polygon? I could 'flatten' the polygon into a se
 
 This is a lot easier to compute, but is it as useful? It's only loosely representative of the way a real robot might receive data about the obstacle. It's probably a reasonable starting point, though. </pre>
 </div>
+<div title="Journal 2011-08-10 (con't)" modifier="RobinDeits" created="201108110646" tags="journal" changecount="1">
+<pre>We can now generate random convex polygons and sample them with added gaussian position noise. This is currently handled by generate_test_data.py. The next step is to bridge this into the existing identification system. This means that I need to modify the inputs and outputs of identify.py to take in a table of data from the HDF5 file and to output its results in a format that I can put back into the table. 
+
+After that, I need a way to visualize and analyze the results, which will involve comparing the original polygons, point clouds, and derived polygons. </pre>
+</div>
+<div title="Journal 2011-08-11 Testing the system" modifier="RobinDeits" created="201108111732" modified="201108111751" tags="journal" changecount="8">
+<pre>{{stretch{[img[foo|files/2011-08-11/test000.png][files/2011-08-11/test000.png]]}}}
+{{stretch{[img[foo|files/2011-08-11/test001.png][files/2011-08-11/test001.png]]}}}
+{{stretch{[img[foo|files/2011-08-11/test002.png][files/2011-08-11/test002.png]]}}}
+{{stretch{[img[foo|files/2011-08-11/test003.png][files/2011-08-11/test003.png]]}}}
+{{stretch{[img[foo|files/2011-08-11/test004.png][files/2011-08-11/test004.png]]}}}
+{{stretch{[img[foo|files/2011-08-11/test005.png][files/2011-08-11/test005.png]]}}}
+{{stretch{[img[foo|files/2011-08-11/test006.png][files/2011-08-11/test006.png]]}}}
+{{stretch{[img[foo|files/2011-08-11/test007.png][files/2011-08-11/test007.png]]}}}
+{{stretch{[img[foo|files/2011-08-11/test008.png][files/2011-08-11/test008.png]]}}}
+{{stretch{[img[foo|files/2011-08-11/test009.png][files/2011-08-11/test009.png]]}}}
+{{stretch{[img[foo|files/2011-08-11/test010.png][files/2011-08-11/test010.png]]}}}
+{{stretch{[img[foo|files/2011-08-11/test011.png][files/2011-08-11/test011.png]]}}}
+</pre>
+</div>
 <div title="LessBackupsPlugin" modifier="MPTW" created="201004041418" modified="201009151231" tags="systemConfig">
 <pre>/***
 |Name:|LessBackupsPlugin|
@@ -1418,7 +1438,7 @@ TertiaryDark: #888
 Error: #f88
 </pre>
 </div>
-<div title="MptwTheme" modifier="MPTW" created="201005122154" modified="201009151231" tags="systemTheme">
+<div title="MptwTheme" modifier="RobinDeits" created="201005122154" modified="201108111743" tags="systemTheme" changecount="1">
 <pre>|Name|MptwTheme|
 |Description|Mptw Theme including custom PageLayout|
 |PageTemplate|##PageTemplate|
@@ -2288,6 +2308,11 @@ Load the FirefoxPrivileges from tiddywiki.org&lt;/a&gt;
 </div>
 <div title="SiteTitle" modifier="RobinDeits" created="201012042256" modified="201106270304" changecount="3">
 <pre>Project Journal</pre>
+</div>
+<div title="StyleSheet" modifier="RobinDeits" created="201108111743" modified="201108111748" changecount="3">
+<pre>.shrink img { width:50% } 
+.stretch img { width:100%; } 
+</pre>
 </div>
 <div title="TabAllTags" modifier="MPTW" created="201004041418" modified="201009151231">
 <pre>&lt;&lt;allTags excludeLists&gt;&gt;
