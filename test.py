@@ -43,7 +43,7 @@ for j in range(40):
     plt.plot([point[0] for point in data], [point[1] for point in data], 'b.')
     plt.legend(["Real Polygon, # sides: %i" %real_num_sides, "Calculated Polygon, # sides: %i" %len(corners), "Sensor Points"])
     n = 0
-    base_path = 'foo'
+    base_path = 'doc/files/2011-08-11/sane'
     while True:
         fname = 'test%03d.png' %n
         if os.path.exists(os.path.join(base_path, fname)):
@@ -51,7 +51,7 @@ for j in range(40):
         else:
             plt.savefig(os.path.join(base_path, fname))
             break
-    print >>result_file,  "|{{thumb{[img[foo|files/2011-08-11/n-side-2/test%03d.png][files/2011-08-11/n-side-2/test%03d.png]]}}}" %(n,n) + " | " + str(real_num_sides)\
+    print >>result_file,  "|{{thumb{[img[foo|files/2011-08-11/sane/test%03d.png][files/2011-08-11/sane/test%03d.png]]}}}" %(n,n) + " | " + str(real_num_sides)\
             + " | " + str(len(corners)) + " | " + str(sigma) + " |"
     side_error = len(corners) - real_num_sides
     if side_error in total_errors:

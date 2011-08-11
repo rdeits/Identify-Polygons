@@ -139,7 +139,11 @@ class PolygonTester:
                 # self.error +=  orthogonal_regression(self.x_bin,self.y_bin)[2]
         # return self.error
         self.generate_polygon(indices)
-        return self.error
+        sanity_check = pnpoly(self.centroid[0], self.centroid[1], self.corners)
+        if sanity_check:
+            return self.error
+        else:
+            return 1e308
 
     def generate_polygon(self, indices):
         slopes = []
@@ -201,7 +205,6 @@ class PolygonTester:
             for point in self.corners:
                 csv_writer.writerow(point)
             f.close()
-
 
 if __name__ == "__main__":
     tester = PolygonTester('sonar_data.csv',4)
