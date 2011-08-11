@@ -59,12 +59,17 @@ class Polygon:
                     break
             offset = self.cum_sides[current_side] - rand_pos
             side_fraction = offset/self.sides[current_side]
-            point = ((side_fraction*(self.corners[current_side-1][0]
+            point = [(side_fraction*(self.corners[current_side-1][0]
                                      - self.corners[current_side][0])
                       + self.corners[current_side][0]),
                      (side_fraction*(self.corners[current_side-1][1]
                                      - self.corners[current_side][1])
-                      + self.corners[current_side][1]))
+                      + self.corners[current_side][1])]
+            if sigma != 0:
+                theta = random.random() * 2*np.pi
+                r = random.gauss(0, sigma)
+                point[0] += r * np.cos(theta)
+                point[1] += r * np.sin(theta)
             points.append(point)        
         plt.plot([self.corners[i][0] for i in range(-1,len(self.corners))], 
                  [self.corners[i][1] for i in range(-1,len(self.corners))]) 
@@ -75,5 +80,5 @@ class Polygon:
 
 if __name__ == "__main__":
     p = Polygon(num_sides = 3, regular = False)
-    p.sample(100)
+    p.sample(100, sigma = .1)
         
