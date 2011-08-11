@@ -43,7 +43,7 @@ for j in range(40):
     plt.plot([point[0] for point in data], [point[1] for point in data], 'b.')
     plt.legend(["Real Polygon, # sides: %i" %real_num_sides, "Calculated Polygon, # sides: %i" %len(corners), "Sensor Points"])
     n = 0
-    base_path = 'doc/files/2011-08-11/n-side-2'
+    base_path = 'foo'
     while True:
         fname = 'test%03d.png' %n
         if os.path.exists(os.path.join(base_path, fname)):

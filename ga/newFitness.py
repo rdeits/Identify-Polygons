@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import csv
 import time
 import os
+from matplotlib.nxutils import pnpoly
 
 def orthogonal_regression(x,y):
     """Given two arrays, x and y, perform orthogonal regression on them, as
@@ -125,24 +126,25 @@ class PolygonTester:
         each bin and return the total error. Thus, each bin of points is
         considered to be a candidate for the collection of all the points along
         a given side of the polygon."""
-        self.error = 0
-        for i, t0 in enumerate(indices):
-            t1 = indices[(i+1)%len(indices)]
-            if t0 < t1:
-                self.x_bin = self.x_list[t0:t1]
-                self.y_bin = self.y_list[t0:t1]
-            else:
-                self.x_bin = np.hstack((self.x_list[t0:],self.x_list[:t1]))
-                self.y_bin = np.hstack((self.y_list[t0:],self.y_list[:t1]))
-            if len(self.x_bin) > 1:
-                self.error +=  orthogonal_regression(self.x_bin,self.y_bin)[2]
+        # self.error = 0
+        # for i, t0 in enumerate(indices):
+            # t1 = indices[(i+1)%len(indices)]
+            # if t0 < t1:
+                # self.x_bin = self.x_list[t0:t1]
+                # self.y_bin = self.y_list[t0:t1]
+            # else:
+                # self.x_bin = np.hstack((self.x_list[t0:],self.x_list[:t1]))
+                # self.y_bin = np.hstack((self.y_list[t0:],self.y_list[:t1]))
+            # if len(self.x_bin) > 1:
+                # self.error +=  orthogonal_regression(self.x_bin,self.y_bin)[2]
+        # return self.error
+        self.generate_polygon(indices)
         return self.error
 
-    def find_corners(self, indices):
-        error = 0
+    def generate_polygon(self, indices):
         slopes = []
         intercepts = []
-        corners = []
+        self.corners = []
         self.error = 0
         for i, t0 in enumerate(indices):
             t1 = indices[(i+1)%len(indices)]
@@ -160,9 +162,6 @@ class PolygonTester:
             else:
                 m = b = 0
                 # print "no points between",t0,'and',t1
-            # if self.data_type == "image":
-            # plt.plot([0,self.width],[b, self.width*m+b])
-        # print "error =",error
 
         for i in range(len(slopes)):
             m0 = slopes[i]
@@ -170,14 +169,13 @@ class PolygonTester:
             m1 = slopes[(i+1)%len(slopes)]
             b1 = intercepts[(i+1)%len(slopes)]
             x = (b1-b0)/(m0-m1)
-            corners.append([x, m0*x+b0])
+            self.corners.append([x, m0*x+b0])
         corner_index = 0
-        for i in range(len(corners)):
-            [x0,y0] = corners[i]
-            [x1,y1] = corners[(i+1)%len(corners)]
-            print "Corner at", x0, ",", y0
-            # if self.data_type == "image":
-        return corners
+        for i in range(len(self.corners)):
+            [x0,y0] = self.corners[i]
+            [x1,y1] = self.corners[(i+1)%len(self.corners)]
+            # print "Corner at", x0, ",", y0
+        return self.corners
 
     def plot_estimate(self, indices):
         # plt.figure()
@@ -190,9 +188,9 @@ class PolygonTester:
         else:
             plt.plot(self.x_list,self.y_list,'bo')
 
-        corners = self.find_corners(indices)
-        plt.plot([corners[i][0] for i in range(-1,len(corners))], 
-                 [corners[i][1] for i in range(-1,len(corners))], 'r-') 
+        self.generate_polygon(indices)
+        plt.plot([self.corners[i][0] for i in range(-1,len(self.corners))], 
+                 [self.corners[i][1] for i in range(-1,len(self.corners))], 'r-') 
 
         plt.xlim(self.x_range)
         plt.ylim(self.y_range)
@@ -200,7 +198,7 @@ class PolygonTester:
         if self.data_type == "csv":
             f = open("corners.csv",'wb')
             csv_writer = csv.writer(f)
-            for point in corners:
+            for point in self.corners:
                 csv_writer.writerow(point)
             f.close()
 

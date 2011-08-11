@@ -51,7 +51,7 @@ class GA(BaseGA):
         self.sort()
         print "Best fitness:", self.individuals[0].fitness
         print "Best genotype:", self.individuals[0].genotype
-        corners = self.fitness_function.find_corners(self.individuals[0].genotype)
+        corners = self.fitness_function.generate_polygon(self.individuals[0].genotype)
         if plot:
             self.fitness_function.plot_estimate(self.individuals[0].genotype)
         return [self.individuals[0].fitness, self.individuals[0].genotype, corners]
