@@ -73,9 +73,9 @@ class Polygon:
             points.append(point)        
         if plot:
             plt.plot([self.corners[i][0] for i in range(-1,len(self.corners))], 
-                     [self.corners[i][1] for i in range(-1,len(self.corners))]) 
+                     [self.corners[i][1] for i in range(-1,len(self.corners))],'b-') 
             plt.hold(True) 
-            plt.plot([p[0] for p in points], [p[1] for p in points], 'ro')
+            plt.plot([p[0] for p in points], [p[1] for p in points], 'bo')
             plt.show()
         return points
 

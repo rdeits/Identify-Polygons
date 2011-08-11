@@ -51,21 +51,21 @@ class GA(BaseGA):
         self.sort()
         print "Best fitness:", self.individuals[0].fitness
         print "Best genotype:", self.individuals[0].genotype
+        corners = self.fitness_function.find_corners(self.individuals[0].genotype)
         if plot:
             self.fitness_function.plot_estimate(self.individuals[0].genotype)
-        return [self.individuals[0].fitness, self.individuals[0].genotype]
+        return [self.individuals[0].fitness, self.individuals[0].genotype, corners]
         # plt.figure()
         # plt.plot(self.best_fitnesses)
         # plt.show()
         
 
 class Individual(BaseIndividual):
-    """each individual in the population is an instance of Individual, 
-    which contains two public fields:
-    self.genotype is a numpy array of the continuous values which that 
-        individual passes to the objective function
-    self.fitness is the numerical fitness score for that individual as 
-        returned by the objective function"""
+    """each individual in the population is an instance of Individual, which
+    contains two public fields: self.genotype is a numpy array of the continuous
+    values which that individual passes to the objective function self.fitness
+    is the numerical fitness score for that individual as returned by the
+    objective function"""
     def __init__(self, fitness_function, genotype=None):
         if genotype is None:
             self.genotype = [int(round(random.random()*(fitness_function.ub[i]-

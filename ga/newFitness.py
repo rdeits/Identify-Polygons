@@ -49,37 +49,41 @@ class PolygonTester:
     sorted by their angle relative to their centroid. It returns the total
     orthogonal distance of all points from the polygon calculated using those
     four indices for orthogonal regression."""
-    def __init__(self,filename,num_vars):
+    def __init__(self, input_data, num_vars):
         self.num_vars = num_vars
-        self.load_data(filename)
+        self.load_data(input_data)
         self.calculate_angles()
         self.lb = [0]*num_vars
         self.ub = [len(self.data)]*num_vars
         self.sort_data()
 
-    def load_data(self,filename):
-        extension = filename.split(os.path.extsep)[-1]
-        assert extension == 'png' or extension == 'csv', "Data must be png or csv"
-        if  extension == 'png':
-            self.data_type = "image"
-            self.image = Image.open(filename)
-            (self.width,self.height) = self.image.size
-            self.image = self.image.convert('RGB')
-            self.image_data = np.resize(self.image.getdata(),(self.height,self.width,3))
+    def load_data(self,input_data):
+        if isinstance(input_data, str):
+            extension = input_data.split(os.path.extsep)[-1]
+            assert extension == 'png' or extension == 'csv', "Data must be png or csv"
+            if  extension == 'png':
+                self.data_type = "image"
+                self.image = Image.open(input_data)
+                (self.width,self.height) = self.image.size
+                self.image = self.image.convert('RGB')
+                self.image_data = np.resize(self.image.getdata(),(self.height,self.width,3))
 
-            self.data = []
-            # f = open('data.csv','wb')
-            # csv_writer = csv.writer(f)
-            for x in range(self.width):
-                for y in range(self.height):
-                    if self.image_data[y][x][0] > 0:
-                        # csv_writer.writerow([x,y])
-                        self.data.append([x,y])
-            # f.close()
+                self.data = []
+                # f = open('data.csv','wb')
+                # csv_writer = csv.writer(f)
+                for x in range(self.width):
+                    for y in range(self.height):
+                        if self.image_data[y][x][0] > 0:
+                            # csv_writer.writerow([x,y])
+                            self.data.append([x,y])
+                # f.close()
+            else:
+                self.data_type = "csv"
+                csv_reader = csv.reader(open(input_data,'rb'))
+                self.data = [[float(row[0]),float(row[1])] for row in csv_reader] 
         else:
-            self.data_type = "csv"
-            csv_reader = csv.reader(open(filename,'rb'))
-            self.data = [[float(row[0]),float(row[1])] for row in csv_reader] 
+            self.data_type = "array"
+            self.data = input_data
         self.x_list = np.array([el[0] for el in self.data])
         self.y_list = np.array([el[1] for el in self.data]) 
         self.x_range = [min(self.x_list),max(self.x_list)]
@@ -134,16 +138,7 @@ class PolygonTester:
                 self.error +=  orthogonal_regression(self.x_bin,self.y_bin)[2]
         return self.error
 
-    def plot_estimate(self,indices):
-        plt.figure()
-        plt.hold(True)
-        if self.data_type == "image":
-            x = range(self.width)
-            y = range(self.height)
-            X, Y = np.meshgrid(x,y)
-            plt.contourf(X,Y,self.image_data[:,:,0])
-        elif self.data_type == "csv":
-            plt.plot(self.x_list,self.y_list,'bo')
+    def find_corners(self, indices):
         error = 0
         slopes = []
         intercepts = []
@@ -182,10 +177,23 @@ class PolygonTester:
             [x1,y1] = corners[(i+1)%len(corners)]
             print "Corner at", x0, ",", y0
             # if self.data_type == "image":
-            plt.plot([x0,x1],[y0,y1])
-            plt.text(x0,y0,str(corner_index))
-            corner_index+=1
-        # if self.data_type == "image":
+        return corners
+
+    def plot_estimate(self, indices):
+        # plt.figure()
+        plt.hold(True)
+        if self.data_type == "image":
+            x = range(self.width)
+            y = range(self.height)
+            X, Y = np.meshgrid(x,y)
+            plt.contourf(X,Y,self.image_data[:,:,0])
+        else:
+            plt.plot(self.x_list,self.y_list,'bo')
+
+        corners = self.find_corners(indices)
+        plt.plot([corners[i][0] for i in range(-1,len(corners))], 
+                 [corners[i][1] for i in range(-1,len(corners))], 'r-') 
+
         plt.xlim(self.x_range)
         plt.ylim(self.y_range)
         plt.show()
@@ -195,7 +203,6 @@ class PolygonTester:
             for point in corners:
                 csv_writer.writerow(point)
             f.close()
-        return error
 
 
 if __name__ == "__main__":
