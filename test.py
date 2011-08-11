@@ -13,6 +13,8 @@ fitness_improvement_factor = 0.95
 result_file = open('results.txt','w')
 print >>result_file, "| Image | Real N | Calculated N | Sensor sigma |"
 
+total_errors = {}
+
 for j in range(40):
     real_num_sides = random.randint(3, 6)
     p = Polygon(num_sides = real_num_sides, regular = False)
@@ -51,8 +53,14 @@ for j in range(40):
             break
     print >>result_file,  "|{{thumb{[img[foo|files/2011-08-11/n-side-2/test%03d.png][files/2011-08-11/n-side-2/test%03d.png]]}}}" %(n,n) + " | " + str(real_num_sides)\
             + " | " + str(len(corners)) + " | " + str(sigma) + " |"
+    side_error = len(corners) - real_num_sides
+    if side_error in total_errors:
+        total_errors[side_error] += 1
+    else:
+        total_errors[side_error] = 1
 
 result_file.close()
+print total_errors
 
 
 
