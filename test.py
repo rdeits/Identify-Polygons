@@ -15,7 +15,7 @@ print >>result_file, "| Image | Real N | Calculated N | Sensor sigma |"
 
 total_errors = {}
 
-for j in range(10):
+for j in range(40):
     real_num_sides = random.randint(3, 6)
     p = Polygon(num_sides = real_num_sides, regular = False)
     data = p.sample(num_data_points, sigma = sigma)
