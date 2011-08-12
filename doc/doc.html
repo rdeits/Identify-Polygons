@@ -1246,7 +1246,7 @@ I'm working on the first question right now:
 [[2011-08-11 n-sided tests 2]]
 </pre>
 </div>
-<div title="Journal 2011-08-11 3 Improving fitness function" modifier="RobinDeits" created="201108112233" modified="201108112301" tags="journal" changecount="5">
+<div title="Journal 2011-08-11 3 Improving fitness function" modifier="RobinDeits" created="201108112233" modified="201108112306" tags="journal" changecount="8">
 <pre>The results from today's testing:
 [[2011-08-11 n-sided tests]]
 [[2011-08-11 n-sided tests 2]]
@@ -1255,6 +1255,8 @@ I'm working on the first question right now:
 [[Journal 2011-08-11 Testing the system]]
 
 All so far show an annoying tendency to occasionally produce polygons which are nothing at all like the original polygon or the point cloud. There may be a different way to construct the polygons which will prevent this, but I have a more immediate solution: I will add a condition to the fitness function which &quot;sanity checks&quot; the polygon against the point cloud, returning a very bad fitness if the check fails. The easiest sanity check I can think of is to see if the centroid of the point cloud lies within the generated polygon. The matplotlib.nxutils.pnpoly function does this. Here are the results:
+
+code at git commit b2d7b2c01eeafd01ed45f0936748d53417a03362
 
 | Image | Real N | Calculated N | Sensor sigma |
 |{{thumb{[img[foo|files/2011-08-11/sane/test000.png][files/2011-08-11/sane/test000.png]]}}} | 4 | 4 | 0.05 |
@@ -1297,7 +1299,72 @@ All so far show an annoying tendency to occasionally produce polygons which are 
 |{{thumb{[img[foo|files/2011-08-11/sane/test037.png][files/2011-08-11/sane/test037.png]]}}} | 4 | 4 | 0.05 |
 |{{thumb{[img[foo|files/2011-08-11/sane/test038.png][files/2011-08-11/sane/test038.png]]}}} | 5 | 5 | 0.05 |
 |{{thumb{[img[foo|files/2011-08-11/sane/test039.png][files/2011-08-11/sane/test039.png]]}}} | 5 | 3 | 0.05 |
+
+Number of results by side # error (calculated - real):
+{0: 21, 1: 3, 2: 1, -1: 9, -3: 1, -2: 5}
+
+
+There are still some obvious failures, but the cases in which the generated polygon is nowhere near the points have been eliminated. Repeating for good measure:
+
+| Image | Real N | Calculated N | Sensor sigma |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test000.png][files/2011-08-11/sane-2/test000.png]]}}} | 5 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test001.png][files/2011-08-11/sane-2/test001.png]]}}} | 5 | 5 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test002.png][files/2011-08-11/sane-2/test002.png]]}}} | 5 | 5 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test003.png][files/2011-08-11/sane-2/test003.png]]}}} | 6 | 5 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test004.png][files/2011-08-11/sane-2/test004.png]]}}} | 6 | 5 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test005.png][files/2011-08-11/sane-2/test005.png]]}}} | 6 | 5 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test006.png][files/2011-08-11/sane-2/test006.png]]}}} | 5 | 5 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test007.png][files/2011-08-11/sane-2/test007.png]]}}} | 3 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test008.png][files/2011-08-11/sane-2/test008.png]]}}} | 5 | 5 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test009.png][files/2011-08-11/sane-2/test009.png]]}}} | 5 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test010.png][files/2011-08-11/sane-2/test010.png]]}}} | 6 | 6 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test011.png][files/2011-08-11/sane-2/test011.png]]}}} | 6 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test012.png][files/2011-08-11/sane-2/test012.png]]}}} | 4 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test013.png][files/2011-08-11/sane-2/test013.png]]}}} | 5 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test014.png][files/2011-08-11/sane-2/test014.png]]}}} | 4 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test015.png][files/2011-08-11/sane-2/test015.png]]}}} | 4 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test016.png][files/2011-08-11/sane-2/test016.png]]}}} | 3 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test017.png][files/2011-08-11/sane-2/test017.png]]}}} | 3 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test018.png][files/2011-08-11/sane-2/test018.png]]}}} | 5 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test019.png][files/2011-08-11/sane-2/test019.png]]}}} | 6 | 5 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test020.png][files/2011-08-11/sane-2/test020.png]]}}} | 6 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test021.png][files/2011-08-11/sane-2/test021.png]]}}} | 5 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test022.png][files/2011-08-11/sane-2/test022.png]]}}} | 6 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test023.png][files/2011-08-11/sane-2/test023.png]]}}} | 6 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test024.png][files/2011-08-11/sane-2/test024.png]]}}} | 6 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test025.png][files/2011-08-11/sane-2/test025.png]]}}} | 4 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test026.png][files/2011-08-11/sane-2/test026.png]]}}} | 5 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test027.png][files/2011-08-11/sane-2/test027.png]]}}} | 3 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test028.png][files/2011-08-11/sane-2/test028.png]]}}} | 5 | 5 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test029.png][files/2011-08-11/sane-2/test029.png]]}}} | 5 | 5 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test030.png][files/2011-08-11/sane-2/test030.png]]}}} | 5 | 6 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test031.png][files/2011-08-11/sane-2/test031.png]]}}} | 4 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test032.png][files/2011-08-11/sane-2/test032.png]]}}} | 5 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test033.png][files/2011-08-11/sane-2/test033.png]]}}} | 5 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test034.png][files/2011-08-11/sane-2/test034.png]]}}} | 3 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test035.png][files/2011-08-11/sane-2/test035.png]]}}} | 3 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test036.png][files/2011-08-11/sane-2/test036.png]]}}} | 3 | 5 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test037.png][files/2011-08-11/sane-2/test037.png]]}}} | 5 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test038.png][files/2011-08-11/sane-2/test038.png]]}}} | 6 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/sane-2/test039.png][files/2011-08-11/sane-2/test039.png]]}}} | 3 | 3 | 0.05 |
+
+
+Side # error counts:
+{0: 14, 1: 3, 2: 1, -1: 13, -3: 1, -2: 8}
+
+
 </pre>
+</div>
+<div title="Journal 2011-08-11 4 More fitness improvements" modifier="RobinDeits" created="201108112317" tags="journal" changecount="1">
+<pre>It may still be possible to refine this technique. There is still a fundamental issue of the relatively frequent occurrences of generated corners which are quite obviously unfeasible. I could address this by making the fitness function more complex:
+# Sort the points by angle
+# Partition them according to the input indices
+# Perform regression to generate the edge lines
+# Calculate the intersections of those lines to find the generated corners
+# Sum the distance from each point to its line segment, rather than the orthogonal distance to its line
+# Return the sum of those distances as the error
+
+The final distance calculation seems only slightly more difficult than the original regression. Time for some pen-and-paper...</pre>
 </div>
 <div title="Journal 2011-08-11 Testing the system" modifier="RobinDeits" created="201108111732" modified="201108111834" tags="journal" changecount="23">
 <pre>The original triangle is in red, the simulated sensor points are in blue, and the reconstructed triangle is in black. Generated with 3 sides, regular=False, sigma = 0.05. 

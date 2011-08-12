@@ -31,11 +31,43 @@ def orthogonal_regression(x,y):
     a = -beta1
     b = 1
     c = -beta0
-    residue = np.sum(np.divide(np.abs(a*x + b*y + c),np.sqrt(a**2 + b**2)))
+    # residue = np.sum(np.divide(np.abs(a*x + b*y + c),np.sqrt(a**2 + b**2)))
     # print "slope:", beta1
     # print "intercept:", beta0
     # print "residue:",residue
-    return beta1, beta0, residue
+    return beta1, beta0
+
+def calculate_residue(x, y, A, B):
+    """Given the x and y coordinates of a set of points, calculate their
+    distance from the line segment from point A to point B. For each point in
+    the x and y lists, if that point is between A and B, then return its
+    orthogonal distance to the line AB. Otherwise, return its distance to the
+    closer of point A and B"""
+    # residue = 0
+    # for i in range(len(x)):
+        # u = ((x[i]-A[0]) * (B[0] - A[0]) + (y[i] - A[1]) * (B[1] - A[1])) /\
+                # ((B[0] - A[0])**2 + (B[1] - A[1])** 2)
+        # if u < 0:
+            # u = 0
+        # if u > 1:
+            # u = 1
+        # C = [A[0] + u * (B[0] - A[0]), A[1] + u * (B[1] - A[1])]
+        # residue += np.sqrt((x[i] - C[0])**2 + (y[i] - C[1])**2)
+    # return residue
+    residue = 0
+    x = np.array(x)
+    y = np.array(y)
+    u = ((x - A[0]) * (B[0] - A[0]) + (y - A[1]) * (B[1]-A[1])) /\
+            ((B[0] - A[0])**2 + (B[1] - A[1])**2)
+    for i in range(len(u)):
+        if u[i] < 0:
+            u[i] = 0
+        elif u[i] > 1:
+            u[i] = 1
+    Cx = A[0] + u * (B[0] - A[0])
+    Cy = A[1] + u * (B[1] - A[1])
+    residue = np.sum(np.sqrt((x - Cx)**2 + (y - Cy)**2))
+    return residue
 
 class PolygonTester:
     """A class based on the FitnessFunction class from ga.py to be used for
@@ -150,22 +182,26 @@ class PolygonTester:
         intercepts = []
         self.corners = []
         self.error = 0
+        self.x_bins = []
+        self.y_bins = []
         for i, t0 in enumerate(indices):
             t1 = indices[(i+1)%len(indices)]
             if t0 < t1:
-                self.x_bin = self.x_list[t0:t1]
-                self.y_bin = self.y_list[t0:t1]
+                x_bin = self.x_list[t0:t1]
+                y_bin = self.y_list[t0:t1]
             else:
-                self.x_bin = np.hstack((self.x_list[t0:],self.x_list[:t1]))
-                self.y_bin = np.hstack((self.y_list[t0:],self.y_list[:t1]))
-            if len(self.x_bin) > 1:
-                m, b, residue =  orthogonal_regression(self.x_bin,self.y_bin)
-                self.error += residue
+                x_bin = np.hstack((self.x_list[t0:],self.x_list[:t1]))
+                y_bin = np.hstack((self.y_list[t0:],self.y_list[:t1]))
+            if len(x_bin) > 1:
+                m, b =  orthogonal_regression(x_bin, y_bin)
                 slopes.append(m)
                 intercepts.append(b)
+                # self.error += residue
             else:
                 m = b = 0
                 # print "no points between",t0,'and',t1
+            self.x_bins.append(x_bin)
+            self.y_bins.append(y_bin)
 
         for i in range(len(slopes)):
             m0 = slopes[i]
@@ -174,11 +210,9 @@ class PolygonTester:
             b1 = intercepts[(i+1)%len(slopes)]
             x = (b1-b0)/(m0-m1)
             self.corners.append([x, m0*x+b0])
-        corner_index = 0
         for i in range(len(self.corners)):
-            [x0,y0] = self.corners[i]
-            [x1,y1] = self.corners[(i+1)%len(self.corners)]
-            # print "Corner at", x0, ",", y0
+            self.error += calculate_residue(self.x_bins[i], self.y_bins[i], 
+                                            self.corners[i-1], self.corners[i])
         return self.corners
 
     def plot_estimate(self, indices):

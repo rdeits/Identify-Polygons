@@ -37,8 +37,8 @@ class Polygon:
         # print self.angles
         # print cum_angles
         # print self.corners
-        print self.sides
-        print self.cum_sides
+        # print self.sides
+        # print self.cum_sides
         # plt.plot([self.corners[i][0] for i in range(-1,len(self.corners))],
                  # [self.corners[i][1] for i in range(-1,len(self.corners))])
         # plt.hold(True)
