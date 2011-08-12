@@ -158,19 +158,10 @@ class PolygonTester:
         each bin and return the total error. Thus, each bin of points is
         considered to be a candidate for the collection of all the points along
         a given side of the polygon."""
-        # self.error = 0
-        # for i, t0 in enumerate(indices):
-            # t1 = indices[(i+1)%len(indices)]
-            # if t0 < t1:
-                # self.x_bin = self.x_list[t0:t1]
-                # self.y_bin = self.y_list[t0:t1]
-            # else:
-                # self.x_bin = np.hstack((self.x_list[t0:],self.x_list[:t1]))
-                # self.y_bin = np.hstack((self.y_list[t0:],self.y_list[:t1]))
-            # if len(self.x_bin) > 1:
-                # self.error +=  orthogonal_regression(self.x_bin,self.y_bin)[2]
-        # return self.error
+        self.sane = True
         self.generate_polygon(indices)
+        if not self.sane:
+            return 1e308
         sanity_check = pnpoly(self.centroid[0], self.centroid[1], self.corners)
         if sanity_check:
             return self.error
@@ -199,7 +190,8 @@ class PolygonTester:
                 # self.error += residue
             else:
                 m = b = 0
-                # print "no points between",t0,'and',t1
+                print "no points between",t0,'and',t1, ", killing..."
+                self.sane = False
             self.x_bins.append(x_bin)
             self.y_bins.append(y_bin)
 

@@ -1,11 +1,11 @@
 | Image | Real N | Calculated N | Sensor sigma |
-|{{thumb{[img[foo|files/2011-08-11/segment/test010.png][files/2011-08-11/segment/test010.png]]}}} | 6 | 3 | 0.05 |
-|{{thumb{[img[foo|files/2011-08-11/segment/test011.png][files/2011-08-11/segment/test011.png]]}}} | 5 | 4 | 0.05 |
-|{{thumb{[img[foo|files/2011-08-11/segment/test012.png][files/2011-08-11/segment/test012.png]]}}} | 6 | 3 | 0.05 |
-|{{thumb{[img[foo|files/2011-08-11/segment/test013.png][files/2011-08-11/segment/test013.png]]}}} | 3 | 3 | 0.05 |
-|{{thumb{[img[foo|files/2011-08-11/segment/test014.png][files/2011-08-11/segment/test014.png]]}}} | 6 | 4 | 0.05 |
-|{{thumb{[img[foo|files/2011-08-11/segment/test015.png][files/2011-08-11/segment/test015.png]]}}} | 5 | 3 | 0.05 |
-|{{thumb{[img[foo|files/2011-08-11/segment/test016.png][files/2011-08-11/segment/test016.png]]}}} | 5 | 4 | 0.05 |
-|{{thumb{[img[foo|files/2011-08-11/segment/test017.png][files/2011-08-11/segment/test017.png]]}}} | 4 | 4 | 0.05 |
-|{{thumb{[img[foo|files/2011-08-11/segment/test018.png][files/2011-08-11/segment/test018.png]]}}} | 3 | 3 | 0.05 |
-|{{thumb{[img[foo|files/2011-08-11/segment/test019.png][files/2011-08-11/segment/test019.png]]}}} | 3 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test050.png][files/2011-08-11/segment/test050.png]]}}} | 5 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test051.png][files/2011-08-11/segment/test051.png]]}}} | 6 | 5 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test052.png][files/2011-08-11/segment/test052.png]]}}} | 5 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test053.png][files/2011-08-11/segment/test053.png]]}}} | 5 | 6 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test054.png][files/2011-08-11/segment/test054.png]]}}} | 4 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test055.png][files/2011-08-11/segment/test055.png]]}}} | 5 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test056.png][files/2011-08-11/segment/test056.png]]}}} | 4 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test057.png][files/2011-08-11/segment/test057.png]]}}} | 5 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test058.png][files/2011-08-11/segment/test058.png]]}}} | 6 | 5 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test059.png][files/2011-08-11/segment/test059.png]]}}} | 4 | 3 | 0.05 |

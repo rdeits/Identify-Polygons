@@ -34,8 +34,9 @@ for j in range(10):
             break
         best_fitness = new_fitness
         num_sides += 1
-
+    
     [fitness, genotype, corners] = old_result 
+    print num_sides - 1, len(corners), corners
     plt.figure()
     plt.hold(True)
     plt.plot([p.corners[i][0] for i in range(-1,len(p.corners))], 
