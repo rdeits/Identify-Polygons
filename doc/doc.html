@@ -1453,6 +1453,58 @@ See also:
 [[2011-08-11 5-sided testing]]
 </pre>
 </div>
+<div title="Journal 2011-08-15 Comparing fitness methods" modifier="RobinDeits" created="201108160122" modified="201108160124" tags="journal" changecount="3">
+<pre>I've set up the script to compare the infinite line and line segment fitness methods. I first ran a test using the line-segment method: 
+git commit bad6b1e0aabe726d1c622a1b8fe098da5ceb57a5
+
+
+| Image | Real N | Calculated N | Sensor sigma |
+|{{thumb{[img[foo|files/2011-08-15/segment/test000.png][files/2011-08-15/segment/test000.png]]}}} | 5 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test001.png][files/2011-08-15/segment/test001.png]]}}} | 5 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test002.png][files/2011-08-15/segment/test002.png]]}}} | 4 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test003.png][files/2011-08-15/segment/test003.png]]}}} | 6 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test004.png][files/2011-08-15/segment/test004.png]]}}} | 3 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test005.png][files/2011-08-15/segment/test005.png]]}}} | 6 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test006.png][files/2011-08-15/segment/test006.png]]}}} | 5 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test007.png][files/2011-08-15/segment/test007.png]]}}} | 4 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test008.png][files/2011-08-15/segment/test008.png]]}}} | 4 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test009.png][files/2011-08-15/segment/test009.png]]}}} | 6 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test010.png][files/2011-08-15/segment/test010.png]]}}} | 5 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test011.png][files/2011-08-15/segment/test011.png]]}}} | 6 | 5 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test012.png][files/2011-08-15/segment/test012.png]]}}} | 5 | 5 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test013.png][files/2011-08-15/segment/test013.png]]}}} | 3 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test014.png][files/2011-08-15/segment/test014.png]]}}} | 4 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test015.png][files/2011-08-15/segment/test015.png]]}}} | 6 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test016.png][files/2011-08-15/segment/test016.png]]}}} | 5 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test017.png][files/2011-08-15/segment/test017.png]]}}} | 4 | 5 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test018.png][files/2011-08-15/segment/test018.png]]}}} | 5 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test019.png][files/2011-08-15/segment/test019.png]]}}} | 3 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test020.png][files/2011-08-15/segment/test020.png]]}}} | 3 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test021.png][files/2011-08-15/segment/test021.png]]}}} | 4 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test022.png][files/2011-08-15/segment/test022.png]]}}} | 6 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test023.png][files/2011-08-15/segment/test023.png]]}}} | 3 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test024.png][files/2011-08-15/segment/test024.png]]}}} | 6 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test025.png][files/2011-08-15/segment/test025.png]]}}} | 5 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test026.png][files/2011-08-15/segment/test026.png]]}}} | 4 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test027.png][files/2011-08-15/segment/test027.png]]}}} | 3 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test028.png][files/2011-08-15/segment/test028.png]]}}} | 3 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test029.png][files/2011-08-15/segment/test029.png]]}}} | 6 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test030.png][files/2011-08-15/segment/test030.png]]}}} | 3 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test031.png][files/2011-08-15/segment/test031.png]]}}} | 5 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test032.png][files/2011-08-15/segment/test032.png]]}}} | 6 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test033.png][files/2011-08-15/segment/test033.png]]}}} | 3 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test034.png][files/2011-08-15/segment/test034.png]]}}} | 4 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test035.png][files/2011-08-15/segment/test035.png]]}}} | 6 | 5 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test036.png][files/2011-08-15/segment/test036.png]]}}} | 6 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test037.png][files/2011-08-15/segment/test037.png]]}}} | 4 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test038.png][files/2011-08-15/segment/test038.png]]}}} | 4 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test039.png][files/2011-08-15/segment/test039.png]]}}} | 3 | 3 | 0.05 |
+
+
+{0: 14, -2: 5, -3: 6, -1: 12, 1: 3}
+
+</pre>
+</div>
 <div title="LessBackupsPlugin" modifier="MPTW" created="201004041418" modified="201009151231" tags="systemConfig">
 <pre>/***
 |Name:|LessBackupsPlugin|
