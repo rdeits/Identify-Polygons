@@ -9,16 +9,10 @@ import time
 import os
 from matplotlib.nxutils import pnpoly
 
-def orthogonal_regression(x,y):
+def orthogonal_regression(x,y, calc_residue = False):
     """Given two arrays, x and y, perform orthogonal regression on them, as
     described in http://en.wikipedia.org/wiki/Deming_regression. Returns
     [slope, intercept, total residue]"""
-    # x = np.array(x)
-    # y = np.array(y)
-    # print "x:"
-    # print x
-    # print "y:"
-    # print y
     n = len(x)
     x_bar = np.mean(x)
     y_bar = np.mean(y)
@@ -31,11 +25,15 @@ def orthogonal_regression(x,y):
     a = -beta1
     b = 1
     c = -beta0
-    # residue = np.sum(np.divide(np.abs(a*x + b*y + c),np.sqrt(a**2 + b**2)))
-    # print "slope:", beta1
-    # print "intercept:", beta0
+
+    # print "slope:", beta1 
+    # print "intercept:", beta0 
     # print "residue:",residue
-    return beta1, beta0
+    if calc_residue:
+        residue = np.sum(np.divide(np.abs(a*x + b*y + c),np.sqrt(a**2 + b**2)))
+        return beta1, beta0, residue
+    else:
+        return beta1, beta0
 
 def calculate_residue(x, y, A, B):
     """Given the x and y coordinates of a set of points, calculate their
@@ -43,18 +41,6 @@ def calculate_residue(x, y, A, B):
     the x and y lists, if that point is between A and B, then return its
     orthogonal distance to the line AB. Otherwise, return its distance to the
     closer of point A and B"""
-    # residue = 0
-    # for i in range(len(x)):
-        # u = ((x[i]-A[0]) * (B[0] - A[0]) + (y[i] - A[1]) * (B[1] - A[1])) /\
-                # ((B[0] - A[0])**2 + (B[1] - A[1])** 2)
-        # if u < 0:
-            # u = 0
-        # if u > 1:
-            # u = 1
-        # C = [A[0] + u * (B[0] - A[0]), A[1] + u * (B[1] - A[1])]
-        # residue += np.sqrt((x[i] - C[0])**2 + (y[i] - C[1])**2)
-    # return residue
-    residue = 0
     x = np.array(x)
     y = np.array(y)
     u = ((x - A[0]) * (B[0] - A[0]) + (y - A[1]) * (B[1]-A[1])) /\
@@ -66,8 +52,7 @@ def calculate_residue(x, y, A, B):
             u[i] = 1
     Cx = A[0] + u * (B[0] - A[0])
     Cy = A[1] + u * (B[1] - A[1])
-    residue = np.sum(np.sqrt((x - Cx)**2 + (y - Cy)**2))
-    return residue
+    return np.sum(np.sqrt((x - Cx)**2 + (y - Cy)**2))
 
 class PolygonTester:
     """A class based on the FitnessFunction class from ga.py to be used for
@@ -82,13 +67,15 @@ class PolygonTester:
     sorted by their angle relative to their centroid. It returns the total
     orthogonal distance of all points from the polygon calculated using those
     four indices for orthogonal regression."""
-    def __init__(self, input_data, num_vars):
+    def __init__(self, input_data, num_vars, residue_method = 'segment'):
         self.num_vars = num_vars
+        self.residue_method = residue_method
         self.load_data(input_data)
         self.calculate_angles()
         self.lb = [0]*num_vars
         self.ub = [len(self.data)]*num_vars
         self.sort_data()
+        assert self.residue_method == 'segment' or self.residue_method == 'line'
 
     def load_data(self,input_data):
         if isinstance(input_data, str):
@@ -160,13 +147,11 @@ class PolygonTester:
         a given side of the polygon."""
         self.sane = True
         self.generate_polygon(indices)
+        self.sane = not(self.sane & pnpoly(self.centroid[0], self.centroid[1], self.corners))
         if not self.sane:
             return 1e308
-        sanity_check = pnpoly(self.centroid[0], self.centroid[1], self.corners)
-        if sanity_check:
-            return self.error
         else:
-            return 1e308
+            return self.error
 
     def generate_polygon(self, indices):
         slopes = []
@@ -184,10 +169,13 @@ class PolygonTester:
                 x_bin = np.hstack((self.x_list[t0:],self.x_list[:t1]))
                 y_bin = np.hstack((self.y_list[t0:],self.y_list[:t1]))
             if len(x_bin) > 1:
-                m, b =  orthogonal_regression(x_bin, y_bin)
+                if self.residue_method == 'line':
+                    m, b, residue =  orthogonal_regression(x_bin, y_bin, True)
+                    self.error += residue
+                else:
+                    m, b = orthogonal_regression(x_bin, y_bin, False)
                 slopes.append(m)
                 intercepts.append(b)
-                # self.error += residue
             else:
                 m = b = 0
                 print "no points between",t0,'and',t1, ", killing..."
@@ -202,9 +190,10 @@ class PolygonTester:
             b1 = intercepts[(i+1)%len(slopes)]
             x = (b1-b0)/(m0-m1)
             self.corners.append([x, m0*x+b0])
-        for i in range(len(self.corners)):
-            self.error += calculate_residue(self.x_bins[i], self.y_bins[i], 
-                                            self.corners[i-1], self.corners[i])
+        if self.residue_method = 'segment':
+            for i in range(len(self.corners)):
+                self.error += calculate_residue(self.x_bins[i], self.y_bins[i], 
+                                                self.corners[i-1], self.corners[i])
         return self.corners
 
     def plot_estimate(self, indices):

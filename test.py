@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from polygon import Polygon
 from identify import *
-import ga.newFitness as fit
+import ga.fitness as fit
 import os.path
 import random
 
@@ -25,7 +25,7 @@ for j in range(40):
     num_sides = 3
     while True:
         old_result = new_result
-        tester = fit.PolygonTester(data, num_sides)
+        tester = fit.PolygonTester(data, num_sides, residue_method = 'segment')
         ga = GA(tester, stall_generations = 20)
         new_fitness = ga.run()[0]
         new_result = ga.report(False)
