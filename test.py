@@ -57,8 +57,7 @@ for j in range(40):
         else:
             plt.savefig(os.path.join(rel_path, fname))
             break
-    print >>result_file,  "|{{thumb{[img[foo|"+rel_path+"/test%03d.png]["+rel_path+"/test%03d.png]]}}}" %(n,n) + " | " + str(real_num_sides)\
-            + " | " + str(len(corners)) + " | " + str(sigma) + " |"
+    print >>result_file,  "|{{thumb{[img[foo|"+rel_path+"/test%03d.png][" %n +rel_path+"/test%03d.png]]}}}" %n + " | " + str(real_num_sides) + " | " + str(len(corners)) + " | " + str(sigma) + " |"
     side_error = len(corners) - real_num_sides
     if side_error in total_errors:
         total_errors[side_error] += 1

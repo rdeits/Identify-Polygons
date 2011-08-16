@@ -147,7 +147,7 @@ class PolygonTester:
         a given side of the polygon."""
         self.sane = True
         self.generate_polygon(indices)
-        self.sane = not(self.sane & pnpoly(self.centroid[0], self.centroid[1], self.corners))
+        self.sane = self.sane and pnpoly(self.centroid[0], self.centroid[1], self.corners)
         if not self.sane:
             return 1e308
         else:
@@ -178,7 +178,7 @@ class PolygonTester:
                 intercepts.append(b)
             else:
                 m = b = 0
-                print "no points between",t0,'and',t1, ", killing..."
+                # print "no points between",t0,'and',t1, ", killing..."
                 self.sane = False
             self.x_bins.append(x_bin)
             self.y_bins.append(y_bin)
@@ -190,7 +190,7 @@ class PolygonTester:
             b1 = intercepts[(i+1)%len(slopes)]
             x = (b1-b0)/(m0-m1)
             self.corners.append([x, m0*x+b0])
-        if self.residue_method = 'segment':
+        if self.residue_method == 'segment':
             for i in range(len(self.corners)):
                 self.error += calculate_residue(self.x_bins[i], self.y_bins[i], 
                                                 self.corners[i-1], self.corners[i])
