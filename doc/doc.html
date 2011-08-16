@@ -1355,7 +1355,7 @@ Side # error counts:
 
 </pre>
 </div>
-<div title="Journal 2011-08-11 4 More fitness improvements" modifier="RobinDeits" created="201108112317" tags="journal" changecount="1">
+<div title="Journal 2011-08-11 4 More fitness improvements" modifier="RobinDeits" created="201108112317" modified="201108120624" tags="journal" changecount="6">
 <pre>It may still be possible to refine this technique. There is still a fundamental issue of the relatively frequent occurrences of generated corners which are quite obviously unfeasible. I could address this by making the fitness function more complex:
 # Sort the points by angle
 # Partition them according to the input indices
@@ -1364,7 +1364,60 @@ Side # error counts:
 # Sum the distance from each point to its line segment, rather than the orthogonal distance to its line
 # Return the sum of those distances as the error
 
-The final distance calculation seems only slightly more difficult than the original regression. Time for some pen-and-paper...</pre>
+The final distance calculation seems only slightly more difficult than the original regression. Time for some pen-and-paper...
+
+This works, it seems. Here are the results from git commit 1ad3eb264050840a832db007086c5713d34884ef
+One issue that came up was that occasionally an n-sided result from the GAs would actually be shown as an n-1 sided computed polygon. This apparently occurred when there were fewer than 2 points in one angular bin, which upset the calculation of corner locations. I've fixed this, such that if such a situation occurs, that individual will be assigned a fitness of 1e308.
+
+| Image | Real N | Calculated N | Sensor sigma |
+|{{thumb{[img[foo|files/2011-08-11/segment/test000.png][files/2011-08-11/segment/test000.png]]}}} | 4 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test001.png][files/2011-08-11/segment/test001.png]]}}} | 6 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test002.png][files/2011-08-11/segment/test002.png]]}}} | 3 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test003.png][files/2011-08-11/segment/test003.png]]}}} | 5 | 5 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test004.png][files/2011-08-11/segment/test004.png]]}}} | 5 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test005.png][files/2011-08-11/segment/test005.png]]}}} | 5 | 5 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test006.png][files/2011-08-11/segment/test006.png]]}}} | 3 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test007.png][files/2011-08-11/segment/test007.png]]}}} | 6 | 5 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test008.png][files/2011-08-11/segment/test008.png]]}}} | 6 | 7 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test009.png][files/2011-08-11/segment/test009.png]]}}} | 4 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test010.png][files/2011-08-11/segment/test010.png]]}}} | 6 | 5 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test011.png][files/2011-08-11/segment/test011.png]]}}} | 5 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test012.png][files/2011-08-11/segment/test012.png]]}}} | 4 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test013.png][files/2011-08-11/segment/test013.png]]}}} | 3 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test014.png][files/2011-08-11/segment/test014.png]]}}} | 3 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test015.png][files/2011-08-11/segment/test015.png]]}}} | 4 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test016.png][files/2011-08-11/segment/test016.png]]}}} | 6 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test017.png][files/2011-08-11/segment/test017.png]]}}} | 3 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test018.png][files/2011-08-11/segment/test018.png]]}}} | 3 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test019.png][files/2011-08-11/segment/test019.png]]}}} | 4 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test020.png][files/2011-08-11/segment/test020.png]]}}} | 5 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test021.png][files/2011-08-11/segment/test021.png]]}}} | 4 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test022.png][files/2011-08-11/segment/test022.png]]}}} | 6 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test023.png][files/2011-08-11/segment/test023.png]]}}} | 3 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test024.png][files/2011-08-11/segment/test024.png]]}}} | 4 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test025.png][files/2011-08-11/segment/test025.png]]}}} | 3 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test026.png][files/2011-08-11/segment/test026.png]]}}} | 4 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test027.png][files/2011-08-11/segment/test027.png]]}}} | 5 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test028.png][files/2011-08-11/segment/test028.png]]}}} | 6 | 5 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test029.png][files/2011-08-11/segment/test029.png]]}}} | 5 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test030.png][files/2011-08-11/segment/test030.png]]}}} | 4 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test031.png][files/2011-08-11/segment/test031.png]]}}} | 6 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test032.png][files/2011-08-11/segment/test032.png]]}}} | 6 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test033.png][files/2011-08-11/segment/test033.png]]}}} | 3 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test034.png][files/2011-08-11/segment/test034.png]]}}} | 4 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test035.png][files/2011-08-11/segment/test035.png]]}}} | 3 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test036.png][files/2011-08-11/segment/test036.png]]}}} | 5 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test037.png][files/2011-08-11/segment/test037.png]]}}} | 4 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test038.png][files/2011-08-11/segment/test038.png]]}}} | 3 | 5 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-11/segment/test039.png][files/2011-08-11/segment/test039.png]]}}} | 5 | 4 | 0.05 |
+
+Side error counts: {0: 18, 1: 3, 2: 1, -1: 9, -3: 2, -2: 7}
+
+I'm not totally convinced that this is actually better than the method used in [[2011-08-11 n-sided tests 2]], especially since that method had not been corrected for the situation in which one or more bins contained fewer than two sensor points. 
+
+Next steps:
+Compare these two implementations for speed and accuracy. For fairness, I should generate a common set of test polygons with a variety of side numbers, then run each system several times on those data sets. Timing will be relatively straightforward, but assessing the quality of the results is difficult. I'll have to keep thinking about that. 
+</pre>
 </div>
 <div title="Journal 2011-08-11 Testing the system" modifier="RobinDeits" created="201108111732" modified="201108111834" tags="journal" changecount="23">
 <pre>The original triangle is in red, the simulated sensor points are in blue, and the reconstructed triangle is in black. Generated with 3 sides, regular=False, sigma = 0.05. 
