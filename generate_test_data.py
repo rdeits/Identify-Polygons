@@ -12,6 +12,8 @@ class Point2D(tab.IsDescription):
     x = tab.Float64Col()
     y = tab.Float64Col()
 
+polygons_per_setting = 20
+
 with tab.openFile('./testData.h5', mode = 'a', title = 'Polygon Identification Test') as h5file:
     for sigma in [0, .05, .1]:
         if not h5file.root.__contains__(sigma_format(sigma)):
@@ -23,22 +25,24 @@ with tab.openFile('./testData.h5', mode = 'a', title = 'Polygon Identification T
                 sides_group = h5file.createGroup(sigma_group, sides_format(sides))
             else:
                 sides_group = sigma_group._v_children[sides_format(sides)]
-            table = h5file.createTable(sides_group,'sensor_data',Point2D)
-            p = Polygon(num_sides = sides, regular = False)
-            data = p.sample(400, sigma = sigma)
-            row = table.row
-            for point in data:
-                row['x'] = point[0]
-                row['y'] = point[1]
-                row.append()
-            table.flush()
-            corners_table = h5file.createTable(sides_group,'real_corners',Point2D)
-            row = corners_table.row
-            for point in p.corners:
-                row['x'] = point[0]
-                row['y'] = point[1]
-                row.append()
-            corners_table.flush()
+            for i in range(polygons_per_setting):
+                poly_group = h5file.createGroup(sides_group, '%03d' %i)
+                table = h5file.createTable(poly_group,'sensor_data',Point2D)
+                p = Polygon(num_sides = sides, regular = False)
+                data = p.sample(400, sigma = sigma)
+                row = table.row
+                for point in data:
+                    row['x'] = point[0]
+                    row['y'] = point[1]
+                    row.append()
+                table.flush()
+                corners_table = h5file.createTable(poly_group,'real_corners',Point2D)
+                row = corners_table.row
+                for point in p.corners:
+                    row['x'] = point[0]
+                    row['y'] = point[1]
+                    row.append()
+                corners_table.flush()
 
 
 

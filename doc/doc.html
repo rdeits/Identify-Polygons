@@ -1453,7 +1453,7 @@ See also:
 [[2011-08-11 5-sided testing]]
 </pre>
 </div>
-<div title="Journal 2011-08-15 Comparing fitness methods" modifier="RobinDeits" created="201108160122" modified="201108160124" tags="journal" changecount="3">
+<div title="Journal 2011-08-15 Comparing fitness methods" modifier="RobinDeits" created="201108160122" modified="201108160128" tags="journal" changecount="6">
 <pre>I've set up the script to compare the infinite line and line segment fitness methods. I first ran a test using the line-segment method: 
 git commit bad6b1e0aabe726d1c622a1b8fe098da5ceb57a5
 
@@ -1503,7 +1503,59 @@ git commit bad6b1e0aabe726d1c622a1b8fe098da5ceb57a5
 
 {0: 14, -2: 5, -3: 6, -1: 12, 1: 3}
 
+Next, I ran a test using the infinite line method:
+git commit 1b5885b1418ed98018d6aa0a34fe8a327c60576c
+
+
+| Image | Real N | Calculated N | Sensor sigma |
+|{{thumb{[img[foo|files/2011-08-15/segment/test040.png][files/2011-08-15/segment/test040.png]]}}} | 5 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test041.png][files/2011-08-15/segment/test041.png]]}}} | 6 | 5 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test042.png][files/2011-08-15/segment/test042.png]]}}} | 4 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test043.png][files/2011-08-15/segment/test043.png]]}}} | 4 | 6 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test044.png][files/2011-08-15/segment/test044.png]]}}} | 6 | 5 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test045.png][files/2011-08-15/segment/test045.png]]}}} | 6 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test046.png][files/2011-08-15/segment/test046.png]]}}} | 5 | 5 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test047.png][files/2011-08-15/segment/test047.png]]}}} | 6 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test048.png][files/2011-08-15/segment/test048.png]]}}} | 4 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test049.png][files/2011-08-15/segment/test049.png]]}}} | 3 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test050.png][files/2011-08-15/segment/test050.png]]}}} | 4 | 6 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test051.png][files/2011-08-15/segment/test051.png]]}}} | 4 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test052.png][files/2011-08-15/segment/test052.png]]}}} | 3 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test053.png][files/2011-08-15/segment/test053.png]]}}} | 4 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test054.png][files/2011-08-15/segment/test054.png]]}}} | 3 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test055.png][files/2011-08-15/segment/test055.png]]}}} | 4 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test056.png][files/2011-08-15/segment/test056.png]]}}} | 3 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test057.png][files/2011-08-15/segment/test057.png]]}}} | 3 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test058.png][files/2011-08-15/segment/test058.png]]}}} | 6 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test059.png][files/2011-08-15/segment/test059.png]]}}} | 5 | 5 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test060.png][files/2011-08-15/segment/test060.png]]}}} | 6 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test061.png][files/2011-08-15/segment/test061.png]]}}} | 6 | 5 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test062.png][files/2011-08-15/segment/test062.png]]}}} | 5 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test063.png][files/2011-08-15/segment/test063.png]]}}} | 5 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test064.png][files/2011-08-15/segment/test064.png]]}}} | 3 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test065.png][files/2011-08-15/segment/test065.png]]}}} | 4 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test066.png][files/2011-08-15/segment/test066.png]]}}} | 3 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test067.png][files/2011-08-15/segment/test067.png]]}}} | 6 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test068.png][files/2011-08-15/segment/test068.png]]}}} | 5 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test069.png][files/2011-08-15/segment/test069.png]]}}} | 5 | 5 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test070.png][files/2011-08-15/segment/test070.png]]}}} | 3 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test071.png][files/2011-08-15/segment/test071.png]]}}} | 6 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test072.png][files/2011-08-15/segment/test072.png]]}}} | 4 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test073.png][files/2011-08-15/segment/test073.png]]}}} | 6 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test074.png][files/2011-08-15/segment/test074.png]]}}} | 5 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test075.png][files/2011-08-15/segment/test075.png]]}}} | 4 | 3 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test076.png][files/2011-08-15/segment/test076.png]]}}} | 5 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test077.png][files/2011-08-15/segment/test077.png]]}}} | 6 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test078.png][files/2011-08-15/segment/test078.png]]}}} | 4 | 4 | 0.05 |
+|{{thumb{[img[foo|files/2011-08-15/segment/test079.png][files/2011-08-15/segment/test079.png]]}}} | 3 | 3 | 0.05 |
+
+{0: 14, 1: 4, 2: 2, -1: 12, -3: 3, -2: 5}
+
+note: the infinite line is obviously at least twice as fast
 </pre>
+</div>
+<div title="Journal 2011-08-16 Generating test data set" modifier="RobinDeits" created="201108170046" modified="201108170049" tags="journal" changecount="2">
+<pre>In order to get some kind of fair comparison between my two fitness methods (and perhaps to also compare with some other benchmark method), I need a set of polygon point clouds. I am going to arbitrarily choose to make 20 samples at each of 3, 4, 5, 6, and 7 sides, and I'll store them in a single HDF5 file. I'll also repeat this for sigma = 0, 0.05, 0.1</pre>
 </div>
 <div title="LessBackupsPlugin" modifier="MPTW" created="201004041418" modified="201009151231" tags="systemConfig">
 <pre>/***
