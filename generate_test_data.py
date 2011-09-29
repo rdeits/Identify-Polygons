@@ -27,6 +27,8 @@ with tab.openFile('./testData.h5', mode = 'a', title = 'Polygon Identification T
                 sides_group = sigma_group._v_children[sides_format(sides)]
             for i in range(polygons_per_setting):
                 poly_group = h5file.createGroup(sides_group, '%03d' %i)
+                poly_group._v_attrs.sigma = sigma
+                poly_group._v_attrs.num_sides = sides
                 table = h5file.createTable(poly_group,'sensor_data',Point2D)
                 p = Polygon(num_sides = sides, regular = False)
                 data = p.sample(400, sigma = sigma)
