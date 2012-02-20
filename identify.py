@@ -10,15 +10,15 @@ import sys
 class GA(BaseGA):
     def create_population(self,size):
         """Initialize the population with new individuals.
-        The generation of a new (presumably random) individual is handled by the 
+        The generation of a new (presumably random) individual is handled by the
         Individual class."""
         individuals = [Individual(self.fitness_function,None)\
                 for i in range(size)]
         self.individuals = np.array(individuals)
 
     def mutate_all(self):
-        """perform mutation on all individuals in the population except the top 
-        self.elite_count by randomly replacing values in those individuals with 
+        """perform mutation on all individuals in the population except the top
+        self.elite_count by randomly replacing values in those individuals with
         new values within the allowable range"""
         for indiv in self.individuals[self.elite_count:]:
             self.update_mutation_factor()
@@ -58,7 +58,7 @@ class GA(BaseGA):
         # plt.figure()
         # plt.plot(self.best_fitnesses)
         # plt.show()
-        
+
 
 class Individual(BaseIndividual):
     """each individual in the population is an instance of Individual, which
@@ -89,7 +89,8 @@ class Individual(BaseIndividual):
 
 
 if __name__ == "__main__":
-    import ga.newFitness as fitness
+    # import ga.newFitness as fitness
+    import ga.fitness as fitness
     best_fitness = 1e308
     num_sides = 3
     ga_list = []

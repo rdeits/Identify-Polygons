@@ -11,6 +11,10 @@ import tables as tab
 # sigma = 0.05
 fitness_improvement_factor = 0.95
 
+"""
+Read the images stored in the testData.h5 HDF5 database, try the polygon identification on them, and save the results in TiddlyWiki markup format.
+"""
+
 result_file = open('results.txt','w')
 print >>result_file, "| Image | Real N | Calculated N | Sensor sigma |"
 
@@ -41,14 +45,14 @@ for group in source_file.walkGroups():
             break
         best_fitness = new_fitness
         num_sides += 1
-    
-    [fitness, genotype, corners] = old_result 
+
+    [fitness, genotype, corners] = old_result
     print num_sides - 1, len(corners), corners
     plt.figure()
     plt.hold(True)
-    plt.plot([real_corners[i][0] for i in range(-1,len(real_corners))], 
-             [real_corners[i][1] for i in range(-1,len(real_corners))],'r-') 
-    plt.plot([corners[i][0] for i in range(-1,len(corners))], 
+    plt.plot([real_corners[i][0] for i in range(-1,len(real_corners))],
+             [real_corners[i][1] for i in range(-1,len(real_corners))],'r-')
+    plt.plot([corners[i][0] for i in range(-1,len(corners))],
              [corners[i][1] for i in range(-1,len(corners))],'k-')
     plt.plot([point[0] for point in data], [point[1] for point in data], 'b.')
     plt.legend(["Real Polygon, # sides: %i" %real_num_sides, "Calculated Polygon, # sides: %i" %len(corners), "Sensor Points"])
